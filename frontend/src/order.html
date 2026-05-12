@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slikskoven - Bestil</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>🍬 Slikskoven</h1>
+    <nav>
+        <a href="index.html">Nyheder</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Bestil din slikpose</h2>
+
+    <!-- Vælg metode -->
+    <div id="method-container">
+        <button class="method-btn active" onclick="selectMethod('MANUAL')">🍬 Vælg selv</button>
+        <button class="method-btn" onclick="selectMethod('COMMENT')">💬 Skriv kommentar</button>
+    </div>
+
+    <!-- Manuel valg -->
+    <div id="manual-section">
+        <h3>Vælg produkter</h3>
+        <div id="product-list">
+            <p>Henter produkter...</p>
+        </div>
+
+        <h3>Din pose</h3>
+        <div id="order-lines">
+            <p class="ingen-nyheder">Ingen produkter valgt endnu.</p>
+        </div>
+        <div id="total-price">Total: 0.00 kr.</div>
+    </div>
+
+    <!-- Kommentar valg -->
+    <div id="comment-section" style="display:none;">
+        <h3>Skriv dine ønsker</h3>
+        <textarea id="comment-input" placeholder="Eks: Jeg vil gerne have en pose på 300g med lidt surt, lidt chokolade og noget lakrids."></textarea>
+    </div>
+
+    <!-- Kontaktinfo -->
+    <div id="contact-section">
+        <h3>Dine oplysninger</h3>
+        <input type="text" id="customer-name" placeholder="Navn">
+        <input type="text" id="customer-phone" placeholder="Telefonnummer">
+    </div>
+
+    <button id="submit-btn" onclick="submitOrder()">Send bestilling</button>
+
+    <div id="confirmation" style="display:none;">
+        <h3> Tak for din bestilling!</h3>
+        <p>Vi behandler din ordre hurtigst muligt.</p>
+    </div>
+
+    <div id="error-message" style="display:none;"></div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/order.js"></script>
+</body>
+</html>
