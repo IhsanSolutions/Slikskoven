@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slikskoven - Produkter</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>🍬 Slikskoven</h1>
+    <nav>
+        <a href="index.html">Nyheder</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Vores Produkter</h2>
+
+    <div id="filter-container">
+        <button class="filter-btn active" onclick="filterCategory('alle')">Alle</button>
+        <button class="filter-btn" onclick="filterCategory('CANDY')">Slik</button>
+        <button class="filter-btn" onclick="filterCategory('ICE_CREAM')">Is</button>
+        <button class="filter-btn" onclick="filterCategory('COFFEE')">Kaffe</button>
+        <button class="filter-btn" onclick="filterCategory('SLUSH_ICE')">Slush Ice</button>
+        <button class="filter-btn" onclick="filterCategory('SOFT_ICE')">Soft Ice</button>
+        <button class="filter-btn" onclick="filterCategory('PANCAKE')">Pandekager</button>
+        <button class="filter-btn" onclick="filterCategory('BEN_AND_JERRYS')">Ben & Jerry's</button>
+        <button class="filter-btn" onclick="filterGelatineFree()">🌱 Gelatinefri</button>
+    </div>
+
+    <div id="product-container">
+        <p>Henter produkter...</p>
+    </div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/products.js"></script>
+</body>
+</html>
