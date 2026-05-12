@@ -1,5 +1,7 @@
 package dk.ek.slikskoven.service;
 
+import dk.ek.slikskoven.dto.CreateProductRequest;
+import dk.ek.slikskoven.dto.ProductRespondsDTO;
 import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
@@ -17,7 +19,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +63,7 @@ public class ProductServiceTest {
         List<Product> products = new ArrayList<>();
         products.add(testProduct);
         products.add(testProduct2);
-        when(productRepo.findAll()).thenReturn(products);
+        when(productRepo.findByIsAvailableTrue()).thenReturn(products);
 
         // Act
         List<Product> result = productService.getAllProducts();
@@ -71,7 +72,7 @@ public class ProductServiceTest {
         assertEquals(2, result.size());
         assertEquals("Vanilla Ice Cream", result.get(0).getName());
         assertEquals("Chocolate Candy", result.get(1).getName());
-        verify(productRepo, times(1)).findAll();
+        verify(productRepo, times(1)).findByIsAvailableTrue();
     }
 
     @Test
@@ -102,13 +103,15 @@ public class ProductServiceTest {
     @Test
     void testCreateProduct() {
         // Arrange
-        Product newProduct = new Product();
-        newProduct.setName("Strawberry Ice Cream");
-        newProduct.setDescription("Fresh strawberry ice cream");
-        newProduct.setPrice(6.99);
-        newProduct.setStockQuantity(75);
-        newProduct.setGelatineType(GelatineType.WITHOUT_GELATINE);
-        newProduct.setCategory(ProductCategory.ICE_CREAM);
+        CreateProductRequest request = new CreateProductRequest(
+                "Strawberry Ice Cream",
+                "Fresh strawberry ice cream",
+                6.99,
+                75,
+                null, // imageUrl
+                GelatineType.WITHOUT_GELATINE,
+                ProductCategory.ICE_CREAM
+        );
 
         Product savedProduct = new Product();
         savedProduct.setProductId(3L);
@@ -123,13 +126,16 @@ public class ProductServiceTest {
         when(productRepo.save(any(Product.class))).thenReturn(savedProduct);
 
         // Act
-        Product result = productService.createProduct(newProduct);
+        ProductRespondsDTO result = productService.createProduct(request);
 
         // Assert
         assertNotNull(result);
-        assertEquals(3L, result.getProductId());
-        assertEquals("Strawberry Ice Cream", result.getName());
-        assertTrue(result.getIsAvailable());
+        assertEquals(3L, result.productId());
+        assertEquals("Strawberry Ice Cream", result.name());
+        assertEquals(6.99, result.price());
+        assertEquals("Fresh strawberry ice cream", result.description());
+        assertEquals(ProductCategory.ICE_CREAM, result.category());
+        assertEquals(GelatineType.WITHOUT_GELATINE, result.gelatineType());
         verify(productRepo, times(1)).save(any(Product.class));
     }
 
@@ -254,4 +260,3 @@ public class ProductServiceTest {
         verify(productRepo, times(1)).findByIsAvailableTrueAndCategory(ProductCategory.COFFEE);
     }
 }
-
