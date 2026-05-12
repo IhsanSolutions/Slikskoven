@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
+
     List<Product> findByIsAvailableTrue();
 
     List<Product> findByNameContainingIgnoreCase(String keyword);

@@ -44,4 +44,9 @@ public class Product {
     private ProductCategory category;
 
     private Boolean isAvailable;
+
+    private Boolean isOnOffer;
+
+    private Double offerPrice;
+
 }

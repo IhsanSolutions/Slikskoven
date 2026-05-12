@@ -1,8 +1,11 @@
 package dk.ek.slikskoven.controller;
 
+import dk.ek.slikskoven.dto.CreateProductRequest;
+import dk.ek.slikskoven.dto.ProductRespondsDTO;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
 import dk.ek.slikskoven.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> getProductByName(@RequestParam String name) {
+        return ResponseEntity.ok(productService.getProductByName(name));
+    }
+
     @GetMapping("/gelatine-free")
     public ResponseEntity<List<Product>> getGelatineFreeProducts() {
         return ResponseEntity.ok(productService.getGelatineFreeProducts());
@@ -40,12 +48,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
+    public ResponseEntity<ProductRespondsDTO> createProduct(@Valid @RequestBody CreateProductRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@Valid @PathVariable Long id, @RequestBody Product product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
