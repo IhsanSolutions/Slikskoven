@@ -24,11 +24,11 @@ function showProducts(products) {
 
     products.forEach(product => {
         const gelatineTag = product.gelatineType === "WITHOUT_GELATINE"
-            ? `<span class="product-tag">🌱 Gelatinefri</span>`
+            ? `<span class="product-tag">🌱 Vegansk</span>`
             : "";
 
         container.innerHTML += `
-            <div class="product-card">
+            <div class="product-card" onclick="openProductModal(${product.productId}, '${product.name}', '${product.description || ''}', ${product.price}, '${product.category}', '${product.gelatineType}', ${product.stockQuantity})">
                 <h3>${product.name}</h3>
                 <p>${product.description || ""}</p>
                 <div class="product-price">${product.price.toFixed(2)} kr. / 100g</div>
@@ -38,9 +38,72 @@ function showProducts(products) {
     });
 }
 
+function openProductModal(id, name, description, price, category, gelatineType, stock) {
+    const modal = document.getElementById("product-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalDetails = document.getElementById("modal-details");
+
+    const gelatineLabel = gelatineType === "WITHOUT_GELATINE" ? "🌱 Vegansk" : "Indeholder gelatine";
+    const stockLabel = stock > 0 ? `✅ På lager (${stock} enheder)` : "❌ Ikke på lager";
+
+    modalTitle.textContent = name;
+    modalDetails.innerHTML = `
+        <div class="modal-section">
+            <h4>Beskrivelse</h4>
+            <p>${description || "Ingen beskrivelse tilgængelig"}</p>
+        </div>
+        <div class="modal-section">
+            <h4>Produktinformation</h4>
+            <div class="modal-info">
+                <div class="info-item">
+                    <strong>Pris:</strong>
+                    <span>${price.toFixed(2)} kr. / 100g</span>
+                </div>
+                <div class="info-item">
+                    <strong>Kategori:</strong>
+                    <span>${category}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Type:</strong>
+                    <span>${gelatineLabel}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Lager:</strong>
+                    <span>${stockLabel}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = "block";
+}
+
+function closeProductModal() {
+    const modal = document.getElementById("product-modal");
+    modal.style.display = "none";
+}
+
+// Close modal when clicking outside the content
+window.onclick = function(event) {
+    const modal = document.getElementById("product-modal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+function updateActiveButton(category) {
+    document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    const activeBtn = document.querySelector(`[data-category="${category}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
+}
+
 async function filterCategory(category) {
-    document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-    event.target.classList.add("active");
+    updateActiveButton(category);
 
     if (category === "alle") {
         showProducts(allProducts);
@@ -55,8 +118,7 @@ async function filterCategory(category) {
 }
 
 async function filterGelatineFree() {
-    document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-    event.target.classList.add("active");
+    updateActiveButton("gelatine-free");
 
     try {
         const products = await fetchData("products/gelatine-free");

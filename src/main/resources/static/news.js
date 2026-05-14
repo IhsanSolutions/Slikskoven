@@ -1,8 +1,17 @@
+let allNews =[];
 async function loadNews() {
     const container = document.getElementById("news-container");
 
+    container.innerHTML = `
+        <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Henter nyheder...</p>
+    </div>
+    `;
+
     try {
         const newsList = await fetchData("news");
+        allNews = newsList;
 
         if (newsList.length === 0) {
             container.innerHTML = `<p class="ingen-nyheder">Der er ingen nyheder lige nu.</p>`;
@@ -35,9 +44,18 @@ async function loadNews() {
         });
 
     } catch (error) {
-        container.innerHTML = `<p class="ingen-nyheder">Kunne ikke hente nyheder.</p>`;
+        container.innerHTML = `<p class="ingen-nyheder">Kunne ikke hente nyheder.</p>
+        <button onclick="loadNews()"> Prøv igen</button>
+            `
+        ;
         console.error(error);
     }
 }
 
 loadNews();
+
+const searchInput = document.getElementById("search");
+
+searchInput.addEventListener("input", function (){
+    console.log("User is typing")
+})
