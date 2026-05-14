@@ -9,8 +9,9 @@
 <body>
 
 <header>
-    <h1>🍬 Slikskoven</h1>
+    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">🍬 Slikskoven</h1>
     <nav>
+        <a href="forside.html">Forside</a>
         <a href="index.html">Nyheder</a>
         <a href="products.html">Produkter</a>
         <a href="order.html">Bestil</a>
@@ -20,22 +21,61 @@
 <main>
     <h2>Vores Produkter</h2>
 
-    <div id="filter-container">
-        <button class="filter-btn active" onclick="filterCategory('alle')">Alle</button>
-        <button class="filter-btn" onclick="filterCategory('CANDY')">Slik</button>
-        <button class="filter-btn" onclick="filterCategory('ICE_CREAM')">Is</button>
-        <button class="filter-btn" onclick="filterCategory('COFFEE')">Kaffe</button>
-        <button class="filter-btn" onclick="filterCategory('SLUSH_ICE')">Slush Ice</button>
-        <button class="filter-btn" onclick="filterCategory('SOFT_ICE')">Soft Ice</button>
-        <button class="filter-btn" onclick="filterCategory('PANCAKE')">Pandekager</button>
-        <button class="filter-btn" onclick="filterCategory('BEN_AND_JERRYS')">Ben & Jerry's</button>
-        <button class="filter-btn" onclick="filterGelatineFree()">🌱 Gelatinefri</button>
+    <div id="categories-container" class="categories-container">
+        <button class="category-btn active" data-category="alle" onclick="filterCategory('alle')">
+            <span class="category-emoji">🍭</span>
+            <span class="category-label">Alle</span>
+        </button>
+        <button class="category-btn" data-category="CANDY" onclick="filterCategory('CANDY')">
+            <span class="category-emoji">🍬</span>
+            <span class="category-label">Slik</span>
+        </button>
+        <button class="category-btn" data-category="ICE_CREAM" onclick="filterCategory('ICE_CREAM')">
+            <span class="category-emoji">🍦</span>
+            <span class="category-label">Is</span>
+        </button>
+        <button class="category-btn" data-category="COFFEE" onclick="filterCategory('COFFEE')">
+            <span class="category-emoji">☕</span>
+            <span class="category-label">Kaffe</span>
+        </button>
+        <button class="category-btn" data-category="SLUSH_ICE" onclick="filterCategory('SLUSH_ICE')">
+            <span class="category-emoji">🧊</span>
+            <span class="category-label">Slush</span>
+        </button>
+        <button class="category-btn" data-category="SOFT_ICE" onclick="filterCategory('SOFT_ICE')">
+            <span class="category-emoji">🍨</span>
+            <span class="category-label">Soft</span>
+        </button>
+        <button class="category-btn" data-category="PANCAKE" onclick="filterCategory('PANCAKE')">
+            <span class="category-emoji">🥞</span>
+            <span class="category-label">Pandekager</span>
+        </button>
+        <button class="category-btn" data-category="BEN_AND_JERRYS" onclick="filterCategory('BEN_AND_JERRYS')">
+            <span class="category-emoji">🍪</span>
+            <span class="category-label">B&J</span>
+        </button>
+        <button class="category-btn" data-category="gelatine-free" onclick="filterGelatineFree()">
+            <span class="category-emoji">🌱</span>
+            <span class="category-label">Vegansk</span>
+        </button>
     </div>
 
     <div id="product-container">
         <p>Henter produkter...</p>
     </div>
 </main>
+
+<!-- Product Detail Modal -->
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeProductModal()">&times;</span>
+        <div id="modal-body">
+            <h2 id="modal-title"></h2>
+            <div id="modal-details"></div>
+            <button class="modal-close-btn" onclick="closeProductModal()">Luk</button>
+        </div>
+    </div>
+</div>
 
 <script src="api.js"></script>
 <script src="products.js"></script>
