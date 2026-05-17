@@ -2,6 +2,7 @@ package dk.ek.slikskoven.service;
 
 import dk.ek.slikskoven.dto.CreateProductRequest;
 import dk.ek.slikskoven.dto.ProductRespondsDTO;
+import dk.ek.slikskoven.dto.UpdateProductRequest;
 import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
@@ -142,13 +143,16 @@ public class ProductServiceTest {
     @Test
     void testUpdateProduct_Success() {
         // Arrange
-        Product updateData = new Product();
-        updateData.setName("Updated Vanilla Ice Cream");
-        updateData.setDescription("Updated description");
-        updateData.setPrice(7.99);
-        updateData.setStockQuantity(60);
-        updateData.setIsAvailable(true);
-        updateData.setGelatineType(GelatineType.WITH_GELATINE);
+        UpdateProductRequest updateData = new UpdateProductRequest(
+                "Updated Vanilla Ice Cream",
+                "Updated description",
+                7.99,
+                60,
+                null,
+                GelatineType.WITH_GELATINE,
+                ProductCategory.ICE_CREAM,
+                true
+        );
 
         Product updatedProduct = new Product();
         updatedProduct.setProductId(1L);
@@ -163,13 +167,13 @@ public class ProductServiceTest {
         when(productRepo.save(any(Product.class))).thenReturn(updatedProduct);
 
         // Act
-        Product result = productService.updateProduct(1L, updateData);
+        ProductRespondsDTO result = productService.updateProduct(1L, updateData);
 
         // Assert
         assertNotNull(result);
-        assertEquals("Updated Vanilla Ice Cream", result.getName());
-        assertEquals(7.99, result.getPrice());
-        assertEquals(60, result.getStockQuantity());
+        assertEquals("Updated Vanilla Ice Cream", result.name());
+        assertEquals(7.99, result.price());
+        assertEquals("Updated description", result.description());
         verify(productRepo, times(1)).findById(1L);
         verify(productRepo, times(1)).save(any(Product.class));
     }
@@ -180,7 +184,18 @@ public class ProductServiceTest {
         when(productRepo.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> productService.updateProduct(999L, testProduct));
+        UpdateProductRequest req = new UpdateProductRequest(
+                "Name",
+                "Desc",
+                1.0,
+                1,
+                null,
+                GelatineType.WITHOUT_GELATINE,
+                ProductCategory.CANDY,
+                true
+        );
+
+        assertThrows(RuntimeException.class, () -> productService.updateProduct(999L, req));
         verify(productRepo, times(1)).findById(999L);
     }
 

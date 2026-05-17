@@ -12,7 +12,7 @@
     <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">🍬 Slikskoven</h1>
     <nav>
         <a href="forside.html">Forside</a>
-        <a href="index.html">Nyheder</a>
+        <a href="news.html">Nyheder</a>
         <a href="products.html">Produkter</a>
         <a href="order.html">Min slikpose</a>
     </nav>
@@ -23,16 +23,19 @@
 
     <!-- Vælg metode -->
     <div id="method-container">
-        <button class="method-btn active" onclick="selectMethod('MANUAL')">🍬 Vælg selv</button>
-        <button class="method-btn" onclick="selectMethod('COMMENT')">💬 Skriv kommentar</button>
+        <button class="method-btn fancy" onclick="openSelectModal()">
+            🍬 Vælg selv
+        </button>
+
+        <button class="method-btn fancy" onclick="openCommentModal()">
+            💬 Skriv kommentar
+        </button>
     </div>
 
     <!-- Manuel valg -->
     <div id="manual-section">
         <h3>Vælg produkter</h3>
-        <div id="product-list">
-            <p>Henter produkter...</p>
-        </div>
+
 
         <h3>Din pose</h3>
         <div id="order-lines">
@@ -62,6 +65,23 @@
     </div>
 
     <div id="error-message" style="display:none;"></div>
+
+    <div id="select-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSelectModal()">&times;</span>
+            <h3>Vælg slik</h3>
+            <div id="select-modal-items"></div>
+        </div>
+    </div>
+
+    <div id="comment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCommentModal()">&times;</span>
+            <h3>Skriv kommentar</h3>
+            <textarea id="modal-comment" placeholder="Skriv dine ønsker..."></textarea>
+            <button onclick="saveComment()">Gem</button>
+        </div>
+    </div>
 </main>
 
 <script src="api.js"></script>

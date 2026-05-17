@@ -2,6 +2,7 @@ package dk.ek.slikskoven.service;
 
 import dk.ek.slikskoven.dto.CreateProductRequest;
 import dk.ek.slikskoven.dto.ProductRespondsDTO;
+import dk.ek.slikskoven.dto.UpdateProductRequest;
 import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
@@ -67,20 +68,20 @@ public class ProductService {
     }
 
 
-    public Product updateProduct(Long id, Product product) {
+    public ProductRespondsDTO updateProduct(Long id, UpdateProductRequest request) {
 
         Product existing = productRepo.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
 
-        existing.setName(product.getName());
-        existing.setDescription(product.getDescription());
-        existing.setPrice(product.getPrice());
-        existing.setStockQuantity(product.getStockQuantity());
+        existing.setName(request.name());
+        existing.setDescription(request.description());
+        existing.setPrice(request.price());
+        existing.setStockQuantity(request.stockQuantity());
+        existing.setGelatineType(request.gelatineType());
+        existing.setCategory(request.category());
+        existing.setIsAvailable(request.isAvailable());
 
-        existing.setGelatineType(product.getGelatineType());
-        existing.setCategory(product.getCategory());
-        existing.setIsAvailable(product.getIsAvailable());
-
-        return productRepo.save(existing);
+        Product saved = productRepo.save(existing);
+        return mapToDTO(saved);
     }
 
     public void deleteProduct(Long id) {

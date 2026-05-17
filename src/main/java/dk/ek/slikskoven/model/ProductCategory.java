@@ -6,6 +6,6 @@ public enum ProductCategory {
     COFFEE,
     SLUSH_ICE,
     SOFT_ICE,
-    PANCAKE,
+    BLANDSELV,
     BEN_AND_JERRYS
 }
