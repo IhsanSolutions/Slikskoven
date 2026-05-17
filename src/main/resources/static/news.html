@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slikskoven - Nyheder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">🍬 Slikskoven</h1>
+    <nav>
+        <a href="forside.html">Forside</a>
+        <a href="news.html">Nyheder</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Nyheder & Arrangementer</h2>
+    <input type="text" id="search" placeholder="Søg efter nyheder...">
+    <div id="news-container">
+        <p>Henter nyheder...</p>
+    </div>
+</main>
+
+<script src="api.js"></script>
+<script src="news.js"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ package dk.ek.slikskoven.controller;
 
 import dk.ek.slikskoven.dto.CreateProductRequest;
 import dk.ek.slikskoven.dto.ProductRespondsDTO;
+import dk.ek.slikskoven.dto.UpdateProductRequest;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
 import dk.ek.slikskoven.service.ProductService;
@@ -53,8 +54,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@Valid @PathVariable Long id, @RequestBody Product product) {
-        return ResponseEntity.ok(productService.updateProduct(id, product));
+    public ResponseEntity<ProductRespondsDTO> updateProduct(@PathVariable Long id,
+                                                            @Valid @RequestBody UpdateProductRequest request) {
+        return ResponseEntity.ok(productService.updateProduct(id, request));
     }
 
     @DeleteMapping("/{id}")
