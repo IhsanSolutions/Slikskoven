@@ -1,0 +1,15 @@
+package dk.ek.slikskoven.dto;
+
+import dk.ek.slikskoven.model.GelatineType;
+import dk.ek.slikskoven.model.ProductCategory;
+
+public record UpdateProductRequest(
+        String name,
+        String description,
+        Double price,
+        Integer stockQuantity,
+        String imageUrl,
+        GelatineType gelatineType,
+        ProductCategory category,
+        Boolean isAvailable
+) {}
