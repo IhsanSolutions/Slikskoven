@@ -7,3 +7,20 @@ async function fetchData(endpoint) {
     }
     return response.json();
 }
+
+async function checkAdmin() {
+    try {
+        const response = await fetch("/api/auth/me");
+        const user = await response.json();
+
+        if (user.admin) {
+            document.querySelectorAll(".admin-only").forEach(element => {
+                element.style.display = "block";
+            });
+        }
+    } catch (error) {
+        console.error("Kunne ikke tjekke admin-status:", error);
+    }
+}
+
+checkAdmin();

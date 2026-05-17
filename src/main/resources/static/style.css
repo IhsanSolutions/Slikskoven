@@ -453,3 +453,7 @@ main h2 {
 .product-card {
     cursor: pointer;
 }
+
+.admin-only {
+    display: none
+}
