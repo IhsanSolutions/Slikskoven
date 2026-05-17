@@ -24,6 +24,7 @@ public class SecurityConfig {
 
                         // admin side
                         .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/adminNews.html").hasRole("ADMIN")
 
                         // brugere kan godt se disse
                         .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/news/**").permitAll()

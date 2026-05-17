@@ -4,6 +4,7 @@ import dk.ek.slikskoven.model.News;
 import dk.ek.slikskoven.repository.NewsRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class NewsService {
     }
 
     public News createNews(News news) {
+        news.setPublishDate(LocalDateTime.now());
         return newsRepo.save(news);
     }
 
@@ -33,6 +35,7 @@ public class NewsService {
 
         existingNews.setTitle(updatedNews.getTitle());
         existingNews.setContent(updatedNews.getContent());
+        existingNews.setImageUrl(updatedNews.getImageUrl());
 
         return newsRepo.save(existingNews);
     }

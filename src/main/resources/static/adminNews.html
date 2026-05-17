@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Nyheder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🍬 Slikskoven Admin</h1>
+
+    <nav>
+        <a href="index.html">Tilbage til nyhedssiden</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Min slikpose</a>
+        <a href="/logout">Log ud</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Administrér nyheder</h2>
+
+    <section>
+        <h3>Opret ny nyhed</h3>
+
+        <form id="create-news-form">
+            <input type="text" id="title" placeholder="Titel" required>
+
+            <textarea id="content" placeholder="Indhold" required></textarea>
+
+            <input type="text" id="imageUrl" placeholder="Billede URL">
+
+            <button type="submit">Opret nyhed</button>
+        </form>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Eksisterende nyheder</h3>
+
+        <div id="admin-news-container">
+            <p>Henter nyheder...</p>
+        </div>
+    </section>
+</main>
+
+<script src="adminNews.js"></script>
+</body>
+</html>
