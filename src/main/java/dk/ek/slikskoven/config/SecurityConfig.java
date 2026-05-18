@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/index.html", true)
+                        .defaultSuccessUrl("/adminNews.html", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slikskoven - Forside</title>
+    <title>Slikskoven | Slik, is, kaffe og bland-selv slikpose</title>
+    <meta name="description" content="Besøg Slikskoven og se vores udvalg af slik, is, kaffe, slushice og bland-selv slikposer til afhentning i butikken.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">🍬 Slikskoven</h1>
+    <h1 onclick="window.location.href='forside.html'">Slikskoven</h1>
+
     <nav>
         <a href="forside.html">Forside</a>
         <a href="news.html">Nyheder</a>
@@ -19,37 +21,101 @@
 </header>
 
 <main>
-    <!-- ===== VELKOMST BESKED SEKTION ===== -->
-    <!-- Rediger velkomst beskeden nedenfor mellem <div class="welcome-message"> og </div> -->
-    <!-- Du kan tilføje HTML formatering som <h2>, <p>, <strong>, osv. -->
-    <div class="welcome-message">
-        <h2>Velkommen til Slikskoven 🍬</h2>
-        <p>
-            <!-- SKRIV DIN VELKOMST BESKED HER -->
-            Din velkomst besked kommer her. Du kan ændre denne tekst ved at redigere denne HTML fil.
-            <!-- SLUT PÅ VELKOMST BESKED -->
-        </p>
-    </div>
-    <!-- ===== SLUT PÅ VELKOMST SEKTION ===== -->
+    <section class="landing-hero">
+        <p class="eyebrow">Slik, is og kaffe i lokalområdet</p>
 
-    <section class="homepage-features">
-        <h2>Hvad kan du gøre her?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>📰 Nyheder</h3>
-                <p>Se de seneste nyheder og arrangementer fra Slikskoven.</p>
-                <a href="news.html" class="feature-link">Læs nyheder →</a>
-            </div>
-            <div class="feature-card">
-                <h3>🍭 Produkter</h3>
-                <p>Udforsk vores brede udvalg af slikprodukter og is.</p>
-                <a href="products.html" class="feature-link">Se produkter →</a>
-            </div>
-            <div class="feature-card">
-                <h3>📦 Bestil</h3>
-                <p>Bestil dine favoritprodukter nemt og hurtigt online.</p>
-                <a href="order.html" class="feature-link">Foretag bestilling →</a>
-            </div>
+        <h2>En moderne slikbutik med klassiske favoritter.</h2>
+
+        <p class="hero-text">
+            Hos Slikskoven kan du udforske vores udvalg af slik, is, kaffe, slushice og Ben & Jerry’s.
+            Du kan også sammensætte din egen slikpose online og afhente den i butikken.
+        </p>
+
+        <div class="hero-actions">
+            <a href="products.html" class="primary-link">Se produkter</a>
+            <a href="order.html" class="secondary-link">Bestil slikpose</a>
+        </div>
+    </section>
+
+    <section class="landing-grid">
+        <article class="landing-card">
+            <h3>Bland din egen slikpose</h3>
+            <p>
+                Vælg dine favoritter direkte på hjemmesiden, send din bestilling og afhent posen færdigpakket.
+            </p>
+            <a href="order.html">Start bestilling</a>
+        </article>
+
+        <article class="landing-card">
+            <h3>Produkter og priser</h3>
+            <p>
+                Se vores udvalg af slik, gelatinefri varianter, kaffe, is, softice, slushice og Ben & Jerry’s.
+            </p>
+            <a href="products.html">Se udvalg</a>
+        </article>
+
+        <article class="landing-card">
+            <h3>Nyheder og tilbud</h3>
+            <p>
+                Følg med i nye varer, arrangementer og aktuelle tilbud fra butikken.
+            </p>
+            <a href="news.html">Læs nyheder</a>
+        </article>
+    </section>
+
+    <section class="info-section">
+        <p class="eyebrow">Find butikken</p>
+        <h2>Besøg Slikskoven</h2>
+
+        <p>
+            Kig forbi butikken og oplev vores udvalg i hyggelige omgivelser.
+        </p>
+
+        <div class="store-info">
+            <p><strong>Adresse:</strong> Brøndbyøster Torv 12, 2605 Brøndby</p>
+            <p><strong>Telefon:</strong> Indsæt telefonnummer her</p>
+            <p><strong>Åbningstider:</strong> Mandag: 10-21
+            Tirsdag: 11-21
+            Onsdag: 11-21
+            Torsdag: 11-21
+            Fredag: 11-22
+            Lørdag: 11-22
+            Søndag: 11-21</p>
+        </div>
+
+        <a
+                class="primary-link"
+                href="https://www.google.com/maps/search/?api=1&query=Slikskoven"
+                target="_blank"
+                rel="noopener noreferrer">
+            Åbn i Google Maps
+        </a>
+    </section>
+
+    <section class="trust-section">
+        <h2>Trygt, nemt og overskueligt</h2>
+
+        <div class="landing-grid">
+            <article class="landing-card">
+                <h3>Fødevarekontrol</h3>
+                <p>
+                    Kunder kan finde relevante oplysninger om fødevarekontrol og hygiejne.
+                </p>
+            </article>
+
+            <article class="landing-card">
+                <h3>Nem afhentning</h3>
+                <p>
+                    Bestil online og afhent din slikpose, når den er pakket og klar.
+                </p>
+            </article>
+
+            <article class="landing-card">
+                <h3>Udvalg til alle</h3>
+                <p>
+                    Slikket opdeles tydeligt, blandt andet i gelatinefri og med gelatine.
+                </p>
+            </article>
         </div>
     </section>
 </main>
@@ -57,4 +123,3 @@
 <script src="api.js"></script>
 </body>
 </html>
-

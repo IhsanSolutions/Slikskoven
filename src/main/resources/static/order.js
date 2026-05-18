@@ -185,7 +185,7 @@ function openSelectModal() {
 
                 <div class="add-box">
                     <input type="number" id="modal-gram-${product.productId}" placeholder="gram" min="1">
-                    <button onclick="addFromModal(${product.productId})">➕ Tilføj</button>
+                    <button onclick="addFromModal(${product.productId})"> Tilføj</button>
                 </div>
             </div>
         `;
