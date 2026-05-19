@@ -143,7 +143,7 @@ async function submitOrder() {
     };
 
     try {
-        const response = await fetch("http://localhost:8080/api/orders", {
+        const response = await fetch(`${API_URL}/orders`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(order)
