@@ -9,17 +9,24 @@
 <body>
 
 <header>
-    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">🍬 Slikskoven</h1>
+    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'"> Slikskoven</h1>
     <nav>
         <a href="forside.html">Forside</a>
         <a href="news.html">Nyheder</a>
         <a href="products.html">Produkter</a>
-        <a href="order.html">Bestil</a>
+        <a href="order.html">Min slikpose</a>
     </nav>
 </header>
 
 <main>
     <h2>Nyheder & Arrangementer</h2>
+
+    <div class="admin-only">
+        <nav>
+            <a href="/adminNews.html"><button type="button">Administrer nyheder</button></a>
+        </nav>
+    </div>
+
     <input type="text" id="search" placeholder="Søg efter nyheder...">
     <div id="news-container">
         <p>Henter nyheder...</p>
