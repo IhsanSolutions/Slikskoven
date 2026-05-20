@@ -24,18 +24,62 @@ function showProducts(products) {
 
     products.forEach(product => {
         const gelatineTag = product.gelatineType === "WITHOUT_GELATINE"
-            ? `<span class="product-tag">🌱 Vegansk</span>`
+            ? `<span class="product-tag"> Vegansk</span>`
             : "";
 
         container.innerHTML += `
-            <div class="product-card" onclick="openProductModal(${product.productId}, '${product.name}', '${product.description || ''}', ${product.price}, '${product.category}', '${product.gelatineType}', ${product.stockQuantity})">
-                <h3>${product.name}</h3>
-                <p>${product.description || ""}</p>
-                <div class="product-price">${product.price.toFixed(2)} kr. / 100g</div>
-                ${gelatineTag}
+            <div class="product-card">
+                <div onclick="openProductModal(
+                    ${product.productId},
+                    '${product.name}',
+                    '${product.description || ''}',
+                    ${product.price},
+                    '${product.category}',
+                    '${product.gelatineType}',
+                    ${product.stockQuantity}
+                )">
+                    <h3>${product.name}</h3>
+                    <p>${product.description || ""}</p>
+                    <div class="product-price">${product.price.toFixed(2)} kr. / 100g</div>
+                    ${gelatineTag}
+                </div>
+
+                <button 
+                    class="add-to-bag-btn"
+                    onclick="addToBag(event, ${product.productId})"
+                >
+                    Tilføj til pose
+                </button>
             </div>
         `;
     });
+}
+
+function addToBag(event, productId) {
+    event.stopPropagation();
+
+    const product = allProducts.find(p => p.productId === productId);
+
+    if (!product) return;
+
+    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
+
+    const existing = bag.find(item => item.productId === productId);
+
+    if (existing) {
+        existing.quantityGrams += 100;
+    } else {
+        bag.push({
+            productId: product.productId,
+            name: product.name,
+            price: product.price,
+            quantityGrams: 100
+        });
+    }
+
+    localStorage.setItem("slikpose", JSON.stringify(bag));
+
+    showToast(`${product.name} blev tilføjet til din pose! `);
 }
 
 function openProductModal(id, name, description, price, category, gelatineType, stock) {
@@ -43,8 +87,8 @@ function openProductModal(id, name, description, price, category, gelatineType, 
     const modalTitle = document.getElementById("modal-title");
     const modalDetails = document.getElementById("modal-details");
 
-    const gelatineLabel = gelatineType === "WITHOUT_GELATINE" ? "🌱 Vegansk" : "Indeholder gelatine";
-    const stockLabel = stock > 0 ? `✅ På lager (${stock} enheder)` : "❌ Ikke på lager";
+    const gelatineLabel = gelatineType === "WITHOUT_GELATINE" ? " Vegansk" : "Indeholder gelatine";
+    const stockLabel = stock > 0 ? ` På lager (${stock} enheder)` : " Ikke på lager";
 
     modalTitle.textContent = name;
     modalDetails.innerHTML = `
@@ -126,6 +170,17 @@ async function filterGelatineFree() {
     } catch (error) {
         console.error(error);
     }
+}
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2000);
 }
 
 loadProducts();

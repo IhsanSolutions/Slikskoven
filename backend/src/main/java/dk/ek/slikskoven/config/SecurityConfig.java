@@ -20,29 +20,34 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/static/**", "/css/**", "/js/**", "/error").permitAll()
+                        // auth endpoint
+                        .requestMatchers("/api/auth/me").permitAll()
 
-                        // admin side
-                        .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/adminNews.html").hasRole("ADMIN")
-
-                        // brugere kan godt se disse
+                        // alle må læse produkter og nyheder
                         .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/news/**").permitAll()
 
-                        // kun admin kan tilgå disse
+                        // kunder må oprette ordre
+                        .requestMatchers(HttpMethod.POST, "/api/orders/**").permitAll()
+
+                        // kun admin må ændre produkter og nyheder
                         .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/news/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/news/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/news/**").hasRole("ADMIN")
 
-                        // alle andre requests fra brugeren er tilladt
+                        // eventuelt: kun admin må se alle ordrer
+                        .requestMatchers(HttpMethod.GET, "/api/orders/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/orders/**").hasRole("ADMIN")
+
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/adminNews.html", true)
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/admin/adminDashboard.html", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
+                        .logoutSuccessUrl("/forside.html")
                         .permitAll()
                 );
 

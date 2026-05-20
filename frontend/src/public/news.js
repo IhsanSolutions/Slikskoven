@@ -44,7 +44,7 @@ async function loadNews() {
         });
 
     } catch (error) {
-        container.innerHTML = `<p class="ingen-nyheder">Kunne ikke hente nyheder.</p>
+        container.innerHTML = `<p class="ingen-nyheder"> Kunne ikke hente nyheder.</p>
         <button onclick="loadNews()"> Prøv igen</button>
             `
         ;

@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - Nyheder</title>
-    <link rel="stylesheet" href="../../src/main/resources/static/style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
 <header>
-    <h1> Slikskoven Admin</h1>
+    <h1>Slikskoven Admin</h1>
 
     <nav>
-        <a href="../../src/main/resources/static/news.html">Tilbage til nyhedssiden</a>
-        <a href="../../src/main/resources/static/products.html">Produkter</a>
-        <a href="../../src/main/resources/static/order.html">Min slikpose</a>
-        <a href="/logout">Log ud</a>
+        <a href="/admin/adminDashboard.html">Dashboard</a>
+        <a href="/news.html">Offentlig nyhedsside</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Min slikpose</a>
+
+        <form action="/logout" method="post" style="display:inline;">
+            <button type="submit">Log ud</button>
+        </form>
     </nav>
 </header>
 
@@ -46,6 +50,9 @@
     </section>
 </main>
 
-<script src="adminNews.js"></script>
+<script src="/api.js"></script>
+<script src="/admin/adminAuth.js"></script>
+<script src="/admin/adminNews.js"></script>
+
 </body>
 </html>

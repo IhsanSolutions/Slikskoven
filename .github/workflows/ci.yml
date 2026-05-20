@@ -35,4 +35,5 @@ jobs:
           restore-keys: maven-${{ runner.os }}-
 
       - name: Build & run tests
-        run: mvn -B verify
+        working-directory: backend
+        run: mvn -B clean verify

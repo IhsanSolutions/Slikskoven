@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -64,6 +64,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.46</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -148,5 +149,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

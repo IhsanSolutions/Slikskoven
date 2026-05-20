@@ -1,3 +1,16 @@
+document.addEventListener("DOMContentLoaded", async () => {
+    const isAdmin = await requireAdmin();
+
+    if (!isAdmin) {
+        return;
+    }
+
+    loadNews();
+
+    const form = document.getElementById("create-news-form");
+    form.addEventListener("submit", createNews);
+});
+
 const NEWS_API_URL = "/api/news";
 
 document.addEventListener("DOMContentLoaded", () => {

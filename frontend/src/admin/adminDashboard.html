@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Slikskoven</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body style="display: none;">
+
+<header>
+    <h1>Slikskoven Admin</h1>
+
+    <nav>
+        <a href="/forside.html">Forside</a>
+        <a href="/news.html">Nyheder</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Min slikpose</a>
+
+        <form action="/logout" method="post" style="display:inline;">
+            <button type="submit">Log ud</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <h2>Admin Dashboard</h2>
+
+    <section class="landing-grid">
+        <article class="landing-card">
+            <h3>Nyheder</h3>
+            <p>Opret, rediger og slet nyheder, som vises på den offentlige nyhedsside.</p>
+            <a href="/admin/adminNews.html" class="primary-link">Administrér nyheder</a>
+        </article>
+
+        <article class="landing-card">
+            <h3>Produkter</h3>
+            <p>Opret, rediger og slet produkter, som vises på produktsiden.</p>
+            <a href="/admin/adminProducts.html" class="primary-link">Administrér produkter</a>
+        </article>
+    </section>
+</main>
+
+<script src="/admin/adminAuth.js"></script>
+
+</body>
+</html>

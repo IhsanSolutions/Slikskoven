@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn -B -DskipTests package
 
 # ---------- Runtime stage ----------
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
