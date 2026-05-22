@@ -4,7 +4,6 @@ import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.ProductCategory;
 
 public record CreateProductRequest(
-
         String name,
         String description,
         Double price,
@@ -12,5 +11,4 @@ public record CreateProductRequest(
         String imageUrl,
         GelatineType gelatineType,
         ProductCategory category
-
 ) {}

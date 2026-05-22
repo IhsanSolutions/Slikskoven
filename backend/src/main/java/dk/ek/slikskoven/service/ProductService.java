@@ -56,17 +56,18 @@ public class ProductService {
         newProduct.setDescription(request.description());
         newProduct.setPrice(request.price());
         newProduct.setStockQuantity(request.stockQuantity());
+        newProduct.setImageUrl(request.imageUrl());
         newProduct.setGelatineType(request.gelatineType());
         newProduct.setCategory(request.category());
 
         newProduct.setIsAvailable(true);
+        newProduct.setIsOnOffer(false);
+        newProduct.setOfferPrice(null);
 
         Product saved = productRepo.save(newProduct);
 
         return mapToDTO(saved);
-
     }
-
 
     public ProductRespondsDTO updateProduct(Long id, UpdateProductRequest request) {
 
@@ -76,11 +77,13 @@ public class ProductService {
         existing.setDescription(request.description());
         existing.setPrice(request.price());
         existing.setStockQuantity(request.stockQuantity());
+        existing.setImageUrl(request.imageUrl());
         existing.setGelatineType(request.gelatineType());
         existing.setCategory(request.category());
         existing.setIsAvailable(request.isAvailable());
 
         Product saved = productRepo.save(existing);
+
         return mapToDTO(saved);
     }
 
