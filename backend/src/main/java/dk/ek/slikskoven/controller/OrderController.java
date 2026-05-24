@@ -4,6 +4,7 @@ import dk.ek.slikskoven.model.Order;
 import dk.ek.slikskoven.model.OrderStatus;
 import dk.ek.slikskoven.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,13 @@ public class OrderController {
     public Order createOrder(@Valid @RequestBody Order order) {
         return orderService.createOrder(order);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+    }
+
 
     @PatchMapping("/{id}/status")
     public Order updateStatus(@PathVariable Long id, @RequestParam OrderStatus status) {

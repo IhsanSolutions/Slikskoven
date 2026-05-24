@@ -54,6 +54,11 @@ public class OrderService {
         return orderRepo.save(order);
     }
 
+    public void deleteOrder(Long id) {
+        Order order = orderRepo.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        orderRepo.delete(order);
+    }
+
     public Order updateStatus(Long id, OrderStatus status) {
         Order order = orderRepo.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(status);
