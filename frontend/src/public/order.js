@@ -93,6 +93,12 @@ function loadBagFromStorage() {
    ========================= */
 function removeFromOrder(productId) {
     orderLines = orderLines.filter(l => l.product.productId !== productId);
+
+    // ✅ Also sync the removal to localStorage
+    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
+    bag = bag.filter(i => i.productId !== productId);
+    localStorage.setItem("slikpose", JSON.stringify(bag));
+
     updateOrderSummary();
 }
 
@@ -211,8 +217,7 @@ function addFromModal(productId) {
 
     let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
 
-    const existing = bag.find(i => i.productId === productId);
-
+    const existing = bag.find(i => String(i.productId) === String(productId));
     if (existing) {
         existing.quantityGrams += grams;
     } else {
