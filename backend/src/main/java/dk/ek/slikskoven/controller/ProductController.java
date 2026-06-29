@@ -1,8 +1,8 @@
 package dk.ek.slikskoven.controller;
 
-import dk.ek.slikskoven.dto.CreateProductRequest;
-import dk.ek.slikskoven.dto.ProductRespondsDTO;
-import dk.ek.slikskoven.dto.UpdateProductRequest;
+import dk.ek.slikskoven.dto.request.CreateProductRequest;
+import dk.ek.slikskoven.dto.response.ProductResponseDTO;
+import dk.ek.slikskoven.dto.request.UpdateProductRequest;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
 import dk.ek.slikskoven.service.ProductService;
@@ -49,12 +49,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductRespondsDTO> createProduct(@Valid @RequestBody CreateProductRequest request) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody CreateProductRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductRespondsDTO> updateProduct(@PathVariable Long id,
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id,
                                                             @Valid @RequestBody UpdateProductRequest request) {
         return ResponseEntity.ok(productService.updateProduct(id, request));
     }

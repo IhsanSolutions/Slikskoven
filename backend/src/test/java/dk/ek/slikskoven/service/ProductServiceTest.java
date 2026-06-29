@@ -1,8 +1,8 @@
 package dk.ek.slikskoven.service;
 
-import dk.ek.slikskoven.dto.CreateProductRequest;
-import dk.ek.slikskoven.dto.ProductRespondsDTO;
-import dk.ek.slikskoven.dto.UpdateProductRequest;
+import dk.ek.slikskoven.dto.request.CreateProductRequest;
+import dk.ek.slikskoven.dto.response.ProductResponseDTO;
+import dk.ek.slikskoven.dto.request.UpdateProductRequest;
 import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
@@ -127,7 +127,7 @@ public class ProductServiceTest {
         when(productRepo.save(any(Product.class))).thenReturn(savedProduct);
 
         // Act
-        ProductRespondsDTO result = productService.createProduct(request);
+        ProductResponseDTO result = productService.createProduct(request);
 
         // Assert
         assertNotNull(result);
@@ -167,7 +167,7 @@ public class ProductServiceTest {
         when(productRepo.save(any(Product.class))).thenReturn(updatedProduct);
 
         // Act
-        ProductRespondsDTO result = productService.updateProduct(1L, updateData);
+        ProductResponseDTO result = productService.updateProduct(1L, updateData);
 
         // Assert
         assertNotNull(result);

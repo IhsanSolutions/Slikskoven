@@ -1,8 +1,8 @@
 package dk.ek.slikskoven.service;
 
-import dk.ek.slikskoven.dto.CreateProductRequest;
-import dk.ek.slikskoven.dto.ProductRespondsDTO;
-import dk.ek.slikskoven.dto.UpdateProductRequest;
+import dk.ek.slikskoven.dto.request.CreateProductRequest;
+import dk.ek.slikskoven.dto.response.ProductResponseDTO;
+import dk.ek.slikskoven.dto.request.UpdateProductRequest;
 import dk.ek.slikskoven.model.GelatineType;
 import dk.ek.slikskoven.model.Product;
 import dk.ek.slikskoven.model.ProductCategory;
@@ -37,9 +37,9 @@ public class ProductService {
         return products;
     }
 
-    private ProductRespondsDTO mapToDTO(Product product) {
+    private ProductResponseDTO mapToDTO(Product product) {
 
-        return new ProductRespondsDTO(
+        return new ProductResponseDTO(
                 product.getProductId(),
                 product.getName(),
                 product.getPrice(),
@@ -49,7 +49,7 @@ public class ProductService {
         );
     }
 
-    public ProductRespondsDTO createProduct(CreateProductRequest request) {
+    public ProductResponseDTO createProduct(CreateProductRequest request) {
         Product newProduct = new Product();
 
         newProduct.setName(request.name());
@@ -69,7 +69,7 @@ public class ProductService {
         return mapToDTO(saved);
     }
 
-    public ProductRespondsDTO updateProduct(Long id, UpdateProductRequest request) {
+    public ProductResponseDTO updateProduct(Long id, UpdateProductRequest request) {
 
         Product existing = productRepo.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
 

@@ -1,6 +1,6 @@
 package dk.ek.slikskoven.controller;
 
-import dk.ek.slikskoven.dto.AuthResponseDTO;
+import dk.ek.slikskoven.dto.response.AuthResponseDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
