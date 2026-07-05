@@ -45,7 +45,10 @@ public class ProductService {
                 product.getPrice(),
                 product.getDescription(),
                 product.getCategory(),
-                product.getGelatineType()
+                product.getGelatineType(),
+                product.getImageUrl(),
+                product.getStockQuantity(),
+                product.getIsAvailable()
         );
     }
 
