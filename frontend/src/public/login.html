@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
     <meta charset="UTF-8">
-    <title>Admin login</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Log ind - Slikskoven</title>
+
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
 
 <header>
     <h1>Slikskoven</h1>
+
     <nav>
         <a href="/forside.html">Forside</a>
         <a href="/news.html">Nyheder</a>
@@ -18,14 +25,71 @@
 </header>
 
 <main>
-    <h2>Admin login</h2>
+    <section>
+        <h2>Log ind</h2>
 
-    <form action="/login" method="post">
-        <input type="text" name="username" placeholder="Brugernavn" required>
-        <input type="password" name="password" placeholder="Kodeord" required>
-        <button type="submit">Log ind</button>
-    </form>
+        <p>
+            Log ind med din e-mail og dit kodeord.
+        </p>
+
+        <div
+                id="login-message"
+                role="alert"
+                style="display: none;"
+        ></div>
+
+        <form
+                id="login-form"
+                action="/login"
+                method="post"
+        >
+            <label for="username">
+                E-mail
+            </label>
+
+            <input
+                    type="email"
+                    id="username"
+                    name="username"
+                    placeholder="E-mail"
+                    autocomplete="email"
+                    required
+            >
+
+            <label for="password">
+                Kodeord
+            </label>
+
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Kodeord"
+                    autocomplete="current-password"
+                    required
+            >
+
+            <button
+                    type="submit"
+                    id="login-button"
+                    disabled
+            >
+                Log ind
+            </button>
+        </form>
+
+        <p>
+            Har du ikke en konto?
+
+            <a href="/register.html">
+                Opret bruger
+            </a>
+        </p>
+    </section>
 </main>
+
+<script src="/api.js"></script>
+<script src="/login.js"></script>
 
 </body>
 </html>

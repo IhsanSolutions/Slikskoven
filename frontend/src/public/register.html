@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret bruger - Slikskoven</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Slikskoven</h1>
+
+    <nav>
+        <a href="/forside.html">Forside</a>
+        <a href="/news.html">Nyheder</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Min slikpose</a>
+        <a href="/login.html">Log ind</a>
+    </nav>
+</header>
+
+<main>
+    <section>
+        <h2>Opret bruger</h2>
+
+        <div
+                id="register-message"
+                role="alert"
+                style="display: none;"
+        ></div>
+
+        <form id="register-form">
+
+            <label for="name">Navn</label>
+
+            <input
+                    type="text"
+                    id="name"
+                    autocomplete="name"
+                    maxlength="100"
+                    required
+            >
+
+            <label for="email">E-mail</label>
+
+            <input
+                    type="email"
+                    id="email"
+                    autocomplete="email"
+                    maxlength="190"
+                    required
+            >
+
+            <label for="phone">Telefonnummer</label>
+
+            <input
+                    type="tel"
+                    id="phone"
+                    autocomplete="tel"
+                    maxlength="30"
+            >
+
+            <label for="password">Kodeord</label>
+
+            <input
+                    type="password"
+                    id="password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="64"
+                    required
+            >
+
+            <label for="confirm-password">Gentag kodeord</label>
+
+            <input
+                    type="password"
+                    id="confirm-password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="64"
+                    required
+            >
+
+            <button type="submit" id="register-button">Opret bruger</button>
+        </form>
+
+        <p>
+            Har du allerede en konto?
+            <a href="/login.html">Log ind</a>
+        </p>
+    </section>
+</main>
+
+<script src="/api.js"></script>
+<script src="/register.js"></script>
+
+</body>
+</html>
