@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
+slikskoven-backup-before-flyway.sql
+structurefixes
 
 ### STS ###
 .apt_generated
