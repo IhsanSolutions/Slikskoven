@@ -1,8 +1,8 @@
 const API_URL = "/api";
 
-document.addEventListener("DOMContentLoaded", checkAdmin);
-
 let cachedCsrfToken = null;
+
+document.addEventListener("DOMContentLoaded", initializeAuthUi);
 
 
 // ==================================================
@@ -83,7 +83,11 @@ async function apiRequest(url, options = {}) {
 
 
 async function fetchData(endpoint) {
-    const response = await apiRequest(`${API_URL}/${endpoint}`);
+    const url = endpoint.startsWith("/")
+        ? endpoint
+        : `${API_URL}/${endpoint}`;
+
+    const response = await apiRequest(url);
 
     if (!response.ok) {
         throw new Error(`Noget gik galt. HTTP-status: ${response.status}`);
@@ -100,6 +104,7 @@ async function getErrorMessage(response, fallbackMessage = "Der opstod en fejl."
         if (errorResponse.message) {
             return errorResponse.message;
         }
+
     } catch (error) {
         console.error("Kunne ikke læse fejlresponsen:", error);
     }
@@ -107,14 +112,13 @@ async function getErrorMessage(response, fallbackMessage = "Der opstod en fejl."
     return fallbackMessage;
 }
 
+
 // ==================================================
 // AUTHENTICATION
 // ==================================================
 
 async function getCurrentUser() {
-    const response = await apiRequest(
-        `${API_URL}/auth/me`
-    );
+    const response = await apiRequest(`${API_URL}/auth/me`);
 
     if (!response.ok) {
         throw new Error(`Kunne ikke hente brugerstatus. HTTP-status: ${response.status}`);
@@ -124,37 +128,93 @@ async function getCurrentUser() {
 }
 
 
+async function initializeAuthUi() {
+    try {
+        const user = await getCurrentUser();
+
+        showAdminOnlyElements(user);
+        updateNavigation(user);
+
+    } catch (error) {
+        console.error("Kunne ikke initialisere auth UI:", error);
+    }
+}
+
+
 async function checkAdmin() {
     try {
         const user = await getCurrentUser();
 
-        if (!user.admin) {
+        showAdminOnlyElements(user);
+
+    } catch (error) {
+        console.error("Kunne ikke tjekke admin-status:", error);
+    }
+}
+
+
+function showAdminOnlyElements(user) {
+    document
+        .querySelectorAll(".admin-only")
+        .forEach(element => {
+            element.style.display = user && user.admin
+                ? "block"
+                : "none";
+        });
+}
+
+
+function updateNavigation(user) {
+    const isAdminPage = window.location.pathname.startsWith("/admin/");
+
+    if (isAdminPage) {
+        return;
+    }
+
+    document.querySelectorAll("header nav").forEach(nav => {
+        const existingAuthLinks = nav.querySelector(".auth-nav-links");
+
+        if (existingAuthLinks) {
+            existingAuthLinks.remove();
+        }
+
+        const authLinks = document.createElement("span");
+        authLinks.classList.add("auth-nav-links");
+
+        if (!user || !user.loggedIn) {
+            authLinks.innerHTML = `
+                <a href="/login.html">Log ind</a>
+            `;
+
+            nav.appendChild(authLinks);
             return;
         }
 
-        document
-            .querySelectorAll(".admin-only")
-            .forEach(element => {
-                element.style.display = "block";
-            });
+        if (user.admin) {
+            authLinks.innerHTML = `
+                <a href="/admin/adminDashboard.html">Admin-dashboard</a>
+                <button type="button" onclick="logout()">Log ud</button>
+            `;
 
-    } catch (error) {
-        console.error(
-            "Kunne ikke tjekke admin-status:",
-            error
-        );
-    }
+            nav.appendChild(authLinks);
+            return;
+        }
+
+        authLinks.innerHTML = `
+            <span class="nav-user-name">${escapeHtml(user.name || user.email)}</span>
+            <button type="button" onclick="logout()">Log ud</button>
+        `;
+
+        nav.appendChild(authLinks);
+    });
 }
 
 
 async function logout() {
     try {
-        const response = await apiRequest(
-            "/logout",
-            {
-                method: "POST"
-            }
-        );
+        const response = await apiRequest("/logout", {
+            method: "POST"
+        });
 
         if (!response.ok) {
             const message = await getErrorMessage(
@@ -171,6 +231,20 @@ async function logout() {
 
     } catch (error) {
         console.error(error);
-        alert(error.message);
+        alert(error.message || "Du kunne ikke logges ud.");
     }
+}
+
+
+// ==================================================
+// HJÆLPEFUNKTIONER
+// ==================================================
+
+function escapeHtml(text) {
+    return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }

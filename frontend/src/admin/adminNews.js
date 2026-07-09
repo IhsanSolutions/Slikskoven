@@ -50,6 +50,8 @@ async function loadNews() {
             const newsElement = document.createElement("div");
             newsElement.classList.add("admin-news-card");
 
+            const imageUrl = normalizeImageUrl(news.imageUrl);
+
             newsElement.innerHTML = `
                 <h4>${escapeHtml(news.title)}</h4>
 
@@ -99,7 +101,7 @@ async function createNews(event) {
     const newNews = {
         title: document.getElementById("title").value.trim(),
         content: document.getElementById("content").value.trim(),
-        imageUrl: document.getElementById("imageUrl").value.trim()
+        imageUrl: normalizeImageUrl(document.getElementById("imageUrl").value)
     };
 
     setButtonLoading(submitButton, true, "Opretter...");
@@ -188,7 +190,7 @@ async function showEditForm(newsId) {
                 <input
                     type="text"
                     id="edit-imageUrl"
-                    value="${escapeHtml(news.imageUrl || "")}"
+                    value="${escapeHtml(normalizeImageUrl(news.imageUrl || ""))}"
                     placeholder="Billede URL"
                 >
 
@@ -225,7 +227,7 @@ async function updateNews(event, newsId) {
     const updatedNews = {
         title: document.getElementById("edit-title").value.trim(),
         content: document.getElementById("edit-content").value.trim(),
-        imageUrl: document.getElementById("edit-imageUrl").value.trim()
+        imageUrl: normalizeImageUrl(document.getElementById("edit-imageUrl").value)
     };
 
     setButtonLoading(submitButton, true, "Gemmer...");
@@ -325,4 +327,22 @@ function escapeHtml(text) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+}
+
+function normalizeImageUrl(imageUrl) {
+    const value = String(imageUrl || "").trim();
+
+    if (!value) {
+        return "";
+    }
+
+    if (
+        value.startsWith("/") ||
+        value.startsWith("http://") ||
+        value.startsWith("https://")
+    ) {
+        return value;
+    }
+
+    return `/${value}`;
 }
