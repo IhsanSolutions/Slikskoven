@@ -229,13 +229,14 @@ async function showEditForm(productId) {
                     ${gelatineOption("WITHOUT_GELATINE", "Uden gelatine", product.gelatineType)}
                 </select>
 
-                <label>
+                <label class="checkbox-row">
                     <input
                         type="checkbox"
                         id="edit-isAvailable"
                         ${product.isAvailable ? "checked" : ""}
                     >
-                    Produktet skal vises offentligt
+                    
+                    <span>Produktet skal vises offentligt</span>
                 </label>
 
                 <button type="submit">Gem ændringer</button>
