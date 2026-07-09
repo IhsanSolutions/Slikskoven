@@ -2,122 +2,205 @@ let selectedMethod = "MANUAL";
 let orderLines = [];
 let allProducts = [];
 
-/* =========================
-   LOAD PRODUCTS (optional)
-   ========================= */
+
+// ==================================================
+// LOAD PRODUCTS
+// ==================================================
+
 async function loadProducts() {
     try {
         allProducts = await fetchData("products");
         showProductList(allProducts);
+
     } catch (error) {
-        document.getElementById("product-list").innerHTML =
-            `<p>Kunne ikke hente produkter.</p>`;
-        console.error(error);
+        const productList = document.getElementById("product-list");
+
+        if (productList) {
+            productList.innerHTML = "<p>Kunne ikke hente produkter.</p>";
+        }
+
+        console.error("Kunne ikke hente produkter:", error);
     }
 }
 
-/* =========================
-   MANUAL PRODUCT LIST (optional fallback)
-   ========================= */
+
+// ==================================================
+// OPTIONAL PRODUCT LIST
+// ==================================================
+
 function showProductList(products) {
     const container = document.getElementById("product-list");
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
 
     container.innerHTML = "";
 
     products.forEach(product => {
         container.innerHTML += `
             <div class="product-select-card">
-                <h4>${product.name}</h4>
-                <p>${product.price.toFixed(2)} kr. / 100g</p>
-                <input type="number" id="gram-${product.productId}" placeholder="gram" min="1">
-                <button onclick="addToOrder(${product.productId})">Tilføj</button>
+                <h4>${escapeHtml(product.name)}</h4>
+
+                <p>
+                    ${formatPrice(product.price)} kr. / 100g
+                </p>
+
+                <input
+                    type="number"
+                    id="gram-${product.productId}"
+                    placeholder="gram"
+                    min="1"
+                >
+
+                <button
+                    type="button"
+                    onclick="addToOrder(${product.productId})"
+                >
+                    Tilføj
+                </button>
             </div>
         `;
     });
 }
 
-/* =========================
-   ADD TO ORDER (manual mode)
-   ========================= */
+
+// ==================================================
+// ADD TO ORDER
+// ==================================================
+
 function addToOrder(productId) {
     const gramInput = document.getElementById(`gram-${productId}`);
-    const grams = parseInt(gramInput.value);
+
+    if (!gramInput) {
+        return;
+    }
+
+    const grams = parseInt(gramInput.value, 10);
 
     if (!grams || grams <= 0) {
         alert("Indtast et gyldigt antal gram.");
         return;
     }
 
-    const product = allProducts.find(p => p.productId === productId);
-    const linePrice = (grams / 100) * product.price;
+    const product = allProducts.find(
+        p => String(p.productId) === String(productId)
+    );
 
-    const existing = orderLines.find(l => l.product.productId === productId);
-
-    if (existing) {
-        existing.quantityGrams += grams;
-        existing.linePrice += linePrice;
-    } else {
-        orderLines.push({
-            product,
-            quantityGrams: grams,
-            linePrice
-        });
+    if (!product) {
+        alert("Produktet blev ikke fundet.");
+        return;
     }
+
+    addProductLine(product, grams);
 
     gramInput.value = "";
     updateOrderSummary();
 }
 
-/* =========================
-   LOAD BAG FROM LOCALSTORAGE
-   ========================= */
+
+function addProductLine(product, grams) {
+    const linePrice = (grams / 100) * Number(product.price);
+
+    const existing = orderLines.find(
+        line => String(line.product.productId) === String(product.productId)
+    );
+
+    if (existing) {
+        existing.quantityGrams += grams;
+        existing.linePrice += linePrice;
+
+        return;
+    }
+
+    orderLines.push({
+        product: {
+            productId: product.productId,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl
+        },
+        quantityGrams: grams,
+        linePrice: linePrice
+    });
+}
+
+
+// ==================================================
+// LOAD BAG FROM LOCALSTORAGE
+// ==================================================
+
 function loadBagFromStorage() {
-    const bag = JSON.parse(localStorage.getItem("slikpose")) || [];
+    const bag =
+        JSON.parse(localStorage.getItem("slikpose")) ||
+        [];
 
     orderLines = bag.map(item => ({
         product: {
             productId: item.productId,
             name: item.name,
-            price: item.price
+            price: Number(item.price),
+            imageUrl: item.imageUrl || ""
         },
-        quantityGrams: item.quantityGrams,
-        linePrice: (item.quantityGrams / 100) * item.price
+        quantityGrams: Number(item.quantityGrams),
+        linePrice: (Number(item.quantityGrams) / 100) * Number(item.price)
     }));
 
     updateOrderSummary();
 }
 
-/* =========================
-   REMOVE ITEM
-   ========================= */
-function removeFromOrder(productId) {
-    orderLines = orderLines.filter(l => l.product.productId !== productId);
 
-    // ✅ Also sync the removal to localStorage
-    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
-    bag = bag.filter(i => i.productId !== productId);
-    localStorage.setItem("slikpose", JSON.stringify(bag));
+// ==================================================
+// REMOVE ITEM
+// ==================================================
+
+function removeFromOrder(productId) {
+    orderLines = orderLines.filter(
+        line => String(line.product.productId) !== String(productId)
+    );
+
+    let bag =
+        JSON.parse(localStorage.getItem("slikpose")) ||
+        [];
+
+    bag = bag.filter(
+        item => String(item.productId) !== String(productId)
+    );
+
+    localStorage.setItem(
+        "slikpose",
+        JSON.stringify(bag)
+    );
 
     updateOrderSummary();
 }
 
-/* =========================
-   UPDATE UI
-   ========================= */
+
+// ==================================================
+// UPDATE UI
+// ==================================================
+
 function updateOrderSummary() {
     const container = document.getElementById("order-lines");
     const totalContainer = document.getElementById("total-price");
 
-    if (!container || !totalContainer) return;
+    if (!container || !totalContainer) {
+        return;
+    }
 
     if (orderLines.length === 0) {
-        container.innerHTML = `<p class="ingen-nyheder">Ingen produkter valgt endnu.</p>`;
+        container.innerHTML = `
+            <p class="ingen-nyheder">
+                Ingen produkter valgt endnu.
+            </p>
+        `;
+
         totalContainer.textContent = "Total: 0.00 kr.";
         return;
     }
 
     container.innerHTML = "";
+
     let total = 0;
 
     orderLines.forEach(line => {
@@ -125,73 +208,167 @@ function updateOrderSummary() {
 
         container.innerHTML += `
             <div class="order-line-item">
-                <span>${line.product.name}</span>
-                <span>${line.quantityGrams}g</span>
-                <span>${line.linePrice.toFixed(2)} kr.</span>
-                <button onclick="removeFromOrder(${line.product.productId})">Fjern</button>
+                <span>${escapeHtml(line.product.name)}</span>
+
+                <span>
+                    ${line.quantityGrams}g
+                </span>
+
+                <span>
+                    ${formatPrice(line.linePrice)} kr.
+                </span>
+
+                <button
+                    type="button"
+                    onclick="removeFromOrder('${line.product.productId}')"
+                >
+                    Fjern
+                </button>
             </div>
         `;
     });
 
-    totalContainer.textContent = `Total: ${total.toFixed(2)} kr.`;
+    totalContainer.textContent =
+        `Total: ${formatPrice(total)} kr.`;
 }
 
-/* =========================
-   METHOD SELECT (FIXED)
-   ========================= */
-function selectMethod(method, event) {
+
+// ==================================================
+// METHOD SELECT
+// ==================================================
+
+function setOrderMethod(method) {
     selectedMethod = method;
 
-    document.querySelectorAll(".method-btn").forEach(btn =>
-        btn.classList.remove("active")
-    );
+    const manualSection =
+        document.getElementById("manual-section");
 
-    if (event) event.target.classList.add("active");
+    const commentSection =
+        document.getElementById("comment-section");
 
-    document.getElementById("manual-section").style.display =
-        method === "MANUAL" ? "block" : "none";
+    if (manualSection) {
+        manualSection.style.display = "block";
+    }
 
-    document.getElementById("comment-section").style.display =
-        method === "COMMENT" ? "block" : "none";
+    if (commentSection) {
+        commentSection.style.display =
+            method === "COMMENT" ? "block" : "none";
+    }
 }
 
-/* =========================
-   COMMENT MODAL (NEW)
-   ========================= */
+
+function selectMethod(method, event) {
+    setOrderMethod(method);
+
+    document.querySelectorAll(".method-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if (event) {
+        event.target.classList.add("active");
+    }
+}
+
+
+// ==================================================
+// COMMENT MODAL
+// ==================================================
+
 function openCommentModal() {
+    setOrderMethod("COMMENT");
+
+    const savedComment =
+        localStorage.getItem("orderComment") ||
+        "";
+
+    const modalComment =
+        document.getElementById("modal-comment");
+
+    if (modalComment) {
+        modalComment.value = savedComment;
+    }
+
     document.getElementById("comment-modal").style.display = "block";
 }
+
 
 function closeCommentModal() {
     document.getElementById("comment-modal").style.display = "none";
 }
 
+
 function saveComment() {
-    const value = document.getElementById("modal-comment").value;
+    const modalComment =
+        document.getElementById("modal-comment");
+
+    const commentInput =
+        document.getElementById("comment-input");
+
+    const value =
+        modalComment ? modalComment.value.trim() : "";
+
     localStorage.setItem("orderComment", value);
+
+    if (commentInput) {
+        commentInput.value = value;
+    }
+
     closeCommentModal();
 }
 
-/* =========================
-   SELECT MODAL (VIEW BAG)
-   ========================= */
+
+// ==================================================
+// SELECT MODAL
+// ==================================================
+
 function openSelectModal() {
+    setOrderMethod("MANUAL");
+
     const modal = document.getElementById("select-modal");
     const container = document.getElementById("select-modal-items");
 
+    if (!modal || !container) {
+        return;
+    }
+
     container.innerHTML = "";
+
+    if (!Array.isArray(allProducts) || allProducts.length === 0) {
+        container.innerHTML = `
+            <p>
+                Der kunne ikke findes nogen produkter.
+            </p>
+        `;
+
+        modal.style.display = "block";
+        return;
+    }
 
     allProducts.forEach(product => {
         container.innerHTML += `
             <div class="modal-product-card">
                 <div>
-                    <strong>${product.name}</strong>
-                    <p>${product.price.toFixed(2)} kr / 100g</p>
+                    <strong>${escapeHtml(product.name)}</strong>
+
+                    <p>
+                        ${formatPrice(product.price)} kr. / 100g
+                    </p>
                 </div>
 
                 <div class="add-box">
-                    <input type="number" id="modal-gram-${product.productId}" placeholder="gram" min="1">
-                    <button onclick="addFromModal(${product.productId})"> Tilføj</button>
+                    <input
+                        type="number"
+                        id="modal-gram-${product.productId}"
+                        placeholder="gram"
+                        min="1"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="addFromModal(${product.productId})"
+                    >
+                        Tilføj
+                    </button>
                 </div>
             </div>
         `;
@@ -200,31 +377,53 @@ function openSelectModal() {
     modal.style.display = "block";
 }
 
+
 function closeSelectModal() {
     document.getElementById("select-modal").style.display = "none";
 }
 
-function addFromModal(productId) {
-    const input = document.getElementById(`modal-gram-${productId}`);
-    const grams = parseInt(input.value);
 
-    if (!grams || grams <= 0) {
-        alert("Indtast gram først");
+function addFromModal(productId) {
+    const input =
+        document.getElementById(`modal-gram-${productId}`);
+
+    if (!input) {
         return;
     }
 
-    const product = allProducts.find(p => p.productId === productId);
+    const grams = parseInt(input.value, 10);
 
-    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
+    if (!grams || grams <= 0) {
+        alert("Indtast gram først.");
+        return;
+    }
 
-    const existing = bag.find(i => String(i.productId) === String(productId));
+    const product = allProducts.find(
+        p => String(p.productId) === String(productId)
+    );
+
+    if (!product) {
+        alert("Produktet blev ikke fundet.");
+        return;
+    }
+
+    let bag =
+        JSON.parse(localStorage.getItem("slikpose")) ||
+        [];
+
+    const existing = bag.find(
+        item => String(item.productId) === String(productId)
+    );
+
     if (existing) {
         existing.quantityGrams += grams;
+
     } else {
         bag.push({
             productId: product.productId,
             name: product.name,
             price: product.price,
+            imageUrl: product.imageUrl || "",
             quantityGrams: grams
         });
     }
@@ -233,15 +432,20 @@ function addFromModal(productId) {
 
     input.value = "";
 
-    loadBagFromStorage(); // refresh order page instantly
+    loadBagFromStorage();
 }
 
-/* =========================
-   CLOSE MODALS ON OUTSIDE CLICK
-   ========================= */
-window.onclick = function (event) {
-    const selectModal = document.getElementById("select-modal");
-    const commentModal = document.getElementById("comment-modal");
+
+// ==================================================
+// CLOSE MODALS ON OUTSIDE CLICK
+// ==================================================
+
+window.onclick = function(event) {
+    const selectModal =
+        document.getElementById("select-modal");
+
+    const commentModal =
+        document.getElementById("comment-modal");
 
     if (event.target === selectModal) {
         selectModal.style.display = "none";
@@ -252,19 +456,30 @@ window.onclick = function (event) {
     }
 };
 
-/* =========================
-   SUBMIT ORDER
-   ========================= */
+
+// ==================================================
+// SUBMIT ORDER
+// ==================================================
+
 async function submitOrder() {
     const name = document.getElementById("customer-name").value.trim();
     const phone = document.getElementById("customer-phone").value.trim();
-    const comment = localStorage.getItem("orderComment");
-
+    const comment = getOrderComment();
     const errorDiv = document.getElementById("error-message");
+
     errorDiv.style.display = "none";
 
-    if (!name) return showError("Navn skal være udfyldt.");
-    if (!phone) return showError("Telefonnummer skal være udfyldt.");
+    if (!name) {
+        return showError("Navn skal være udfyldt.");
+    }
+
+    if (!phone) {
+        return showError("Telefonnummer skal være udfyldt.");
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+        return showError("Telefonnummer skal være mindst 8 cifre.");
+    }
 
     if (selectedMethod === "MANUAL" && orderLines.length === 0) {
         return showError("Tilføj mindst ét produkt til din pose.");
@@ -275,52 +490,148 @@ async function submitOrder() {
     }
 
     const order = {
-        customer: { name, phone },
+        customer: {
+            name,
+            phone
+        },
+
         orderMethod: selectedMethod,
-        comment: selectedMethod === "COMMENT" ? comment : null,
-        orderLines: selectedMethod === "MANUAL"
-            ? orderLines.map(l => ({
-                product: { productId: l.product.productId },
-                quantityGrams: l.quantityGrams
-            }))
-            : null
+
+        comment:
+            selectedMethod === "COMMENT" ? comment : null,
+
+        orderLines:
+            selectedMethod === "MANUAL"
+                ? orderLines.map(line => ({
+                    product: {
+                        productId: line.product.productId
+                    },
+                    quantityGrams: line.quantityGrams
+                }))
+                : null
     };
 
     try {
-        const response = await fetch("http://localhost:8080/api/orders", {
+        const response = await apiRequest("/api/orders", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
             body: JSON.stringify(order)
         });
 
-        if (!response.ok) throw new Error();
+        if (!response.ok) {
+            const message = await getErrorMessage(response, "Bestillingen kunne ikke sendes.");
 
-        document.getElementById("confirmation").style.display = "block";
-        document.getElementById("submit-btn").style.display = "none";
+            throw new Error(message);
+        }
 
-        localStorage.removeItem("slikpose");
-        localStorage.removeItem("orderComment");
+        showConfirmation();
+        clearOrderState();
 
-        orderLines = [];
-        updateOrderSummary();
-
-    } catch (err) {
-        showError("Noget gik galt. Prøv igen.");
-        console.error(err);
+    } catch (error) {
+        showError(error.message || "Noget gik galt. Prøv igen.");
+        console.error("Fejl ved bestilling:", error);
     }
 }
 
-/* =========================
-   ERROR HANDLING
-   ========================= */
+
+function getOrderComment() {
+    const commentInput = document.getElementById("comment-input");
+
+    const modalComment = document.getElementById("modal-comment");
+
+    const localStorageComment = localStorage.getItem("orderComment") || "";
+
+    if (commentInput && commentInput.value.trim()) {
+        return commentInput.value.trim();
+    }
+
+    if (modalComment && modalComment.value.trim()) {
+        return modalComment.value.trim();
+    }
+
+    return localStorageComment.trim();
+}
+
+
+function showConfirmation() {
+    document.getElementById("confirmation").style.display = "block";
+    document.getElementById("submit-btn").style.display = "none";
+}
+
+
+function clearOrderState() {
+    localStorage.removeItem("slikpose");
+    localStorage.removeItem("orderComment");
+
+    orderLines = [];
+
+    const commentInput = document.getElementById("comment-input");
+
+    const modalComment = document.getElementById("modal-comment");
+
+    if (commentInput) {
+        commentInput.value = "";
+    }
+
+    if (modalComment) {
+        modalComment.value = "";
+    }
+
+    updateOrderSummary();
+}
+
+
+// ==================================================
+// ERROR HANDLING
+// ==================================================
+
 function showError(message) {
-    const errorDiv = document.getElementById("error-message");
+    const errorDiv =
+        document.getElementById("error-message");
+
     errorDiv.textContent = message;
     errorDiv.style.display = "block";
 }
 
-/* =========================
-   INIT
-   ========================= */
+
+// ==================================================
+// HELPERS
+// ==================================================
+
+function formatPrice(price) {
+    const numericPrice = Number(price);
+
+    if (Number.isNaN(numericPrice)) {
+        return "0.00";
+    }
+
+    return numericPrice.toFixed(2);
+}
+
+function isValidPhoneNumber(phone) {
+    const digitsOnly = String(phone || "").replace(/\D/g, "");
+
+    return digitsOnly.length >= 8;
+}
+
+function escapeHtml(text) {
+    return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+// ==================================================
+// INIT
+// ==================================================
+
 loadProducts();
 loadBagFromStorage();
+setOrderMethod("MANUAL");

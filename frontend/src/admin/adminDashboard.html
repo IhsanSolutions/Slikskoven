@@ -35,11 +35,20 @@
             <p>Opret, rediger og slet produkter, som vises på produktsiden.</p>
             <a href="/admin/adminProducts.html" class="primary-link">Administrér produkter</a>
         </article>
+
+        <article class="landing-card">
+            <h3>Ordrer</h3>
+            <p>Se bestillinger, kundeoplysninger og markér ordrer som klar eller afhentet.</p>
+            <a href="/admin/adminOrders.html" class="primary-link">Administrér ordrer</a>
+        </article>
     </section>
 </main>
 
 <script src="/api.js"></script>
 <script src="/admin/adminAuth.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", requireAdmin);
+</script>
 
 </body>
 </html>

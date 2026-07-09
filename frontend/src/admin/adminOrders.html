@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Ordrer</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Slikskoven Admin</h1>
+
+    <nav>
+        <a href="/admin/adminDashboard.html">Dashboard</a>
+        <a href="/admin/adminNews.html">Nyheder</a>
+        <a href="/admin/adminProducts.html">Produkter</a>
+        <a href="/forside.html">Forside</a>
+
+        <button type="button" onclick="logout()">Log ud</button>
+    </nav>
+</header>
+
+<main>
+    <h2>Administrér ordrer</h2>
+
+    <section>
+        <p>
+            Her kan du se nye bestillinger og ændre deres status.
+        </p>
+
+        <div id="admin-orders-container">
+            <p>Henter ordrer...</p>
+        </div>
+    </section>
+</main>
+
+<script src="/api.js"></script>
+<script src="/admin/adminAuth.js"></script>
+<script src="/admin/adminOrders.js"></script>
+
+</body>
+</html>
