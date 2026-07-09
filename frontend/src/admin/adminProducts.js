@@ -77,12 +77,12 @@ async function loadProducts() {
 
                 <p>
                     <strong>Kategori:</strong>
-                    ${escapeHtml(product.category)}
+                    ${escapeHtml(formatCategory(product.category))}
                 </p>
 
                 <p>
                     <strong>Gelatine:</strong>
-                    ${escapeHtml(product.gelatineType)}
+                    ${escapeHtml(formatGelatineType(product.gelatineType))}
                 </p>
 
                 <p>
@@ -123,7 +123,7 @@ async function createProduct(event) {
         description: document.getElementById("description").value.trim(),
         price: Number(document.getElementById("price").value),
         stockQuantity: Number(document.getElementById("stockQuantity").value),
-        imageUrl: document.getElementById("imageUrl").value.trim(),
+        imageUrl: normalizeImageUrl(document.getElementById("imageUrl").value),
         category: document.getElementById("category").value,
         gelatineType: document.getElementById("gelatineType").value
     };
@@ -273,7 +273,7 @@ async function updateProduct(event, productId) {
         description: document.getElementById("edit-description").value.trim(),
         price: Number(document.getElementById("edit-price").value),
         stockQuantity: Number(document.getElementById("edit-stockQuantity").value),
-        imageUrl: document.getElementById("edit-imageUrl").value.trim(),
+        imageUrl: normalizeImageUrl(document.getElementById("edit-imageUrl").value),
         category: document.getElementById("edit-category").value,
         gelatineType: document.getElementById("edit-gelatineType").value,
         isAvailable: document.getElementById("edit-isAvailable").checked
@@ -485,4 +485,29 @@ function normalizeImageUrl(imageUrl) {
     }
 
     return `/${value}`;
+}
+
+function formatCategory(category) {
+    const categories = {
+        CANDY: "Slik",
+        ICE_CREAM: "Is",
+        COFFEE: "Kaffe",
+        SLUSH_ICE: "Slush ice",
+        SOFT_ICE: "Softice",
+        BLAND_SELV: "Bland selv",
+        PANCAKE: "Pandekager",
+        BEN_AND_JERRYS: "Ben & Jerry's"
+    };
+
+    return categories[category] || category || "";
+}
+
+
+function formatGelatineType(gelatineType) {
+    const gelatineTypes = {
+        WITH_GELATINE: "Med gelatine",
+        WITHOUT_GELATINE: "Uden gelatine"
+    };
+
+    return gelatineTypes[gelatineType] || gelatineType || "";
 }
