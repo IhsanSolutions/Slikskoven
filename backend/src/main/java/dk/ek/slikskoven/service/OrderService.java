@@ -93,6 +93,10 @@ public class OrderService {
         if (customer.getPhone() == null || customer.getPhone().isBlank()) {
             throw new IllegalArgumentException("Telefonnummer skal være udfyldt.");
         }
+
+        if (!hasAtLeastEightDigits(customer.getPhone())) {
+            throw new IllegalArgumentException("Telefonnummer skal være mindst 8 cifre.");
+        }
     }
 
     private void calculateAndAttachOrderLines(Order order) {
@@ -135,5 +139,11 @@ public class OrderService {
         if (line.getQuantityGrams() == null || line.getQuantityGrams() < 1) {
             throw new IllegalArgumentException("Mængde i gram skal være mindst 1.");
         }
+    }
+
+    private boolean hasAtLeastEightDigits(String phone) {
+        String digitsOnly = phone.replaceAll("\\D", "");
+
+        return digitsOnly.length() >= 8;
     }
 }
