@@ -28,6 +28,44 @@
             Her kan du se nye bestillinger og ændre deres status.
         </p>
 
+        <div class="order-filter-bar" aria-label="Filtrér ordrer">
+            <button
+                    type="button"
+                    class="order-filter-button active"
+                    data-order-status="ALL"
+            >
+                Alle
+                <span id="order-count-all">0</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="order-filter-button"
+                    data-order-status="MODTAGET"
+            >
+                Modtaget
+                <span id="order-count-modtaget">0</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="order-filter-button"
+                    data-order-status="KLAR"
+            >
+                Klar
+                <span id="order-count-klar">0</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="order-filter-button"
+                    data-order-status="AFHENTET"
+            >
+                Afhentet
+                <span id="order-count-afhentet">0</span>
+            </button>
+        </div>
+
         <div id="admin-orders-container">
             <p>Henter ordrer...</p>
         </div>

@@ -1,5 +1,8 @@
 const ORDERS_API_URL = "/api/orders";
 
+let allOrders = [];
+let activeOrderFilter = "ALL";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const isAdmin = await requireAdmin();
 
@@ -7,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    setupOrderFilters();
     await loadOrders();
 });
 
@@ -30,20 +34,15 @@ async function loadOrders() {
 
         const orders = await response.json();
 
-        container.innerHTML = "";
+        allOrders = Array.isArray(orders)
+            ? orders.sort((a, b) => {
+                return new Date(b.createdAt || 0) -
+                    new Date(a.createdAt || 0);
+            })
+            : [];
 
-        if (!Array.isArray(orders) || orders.length === 0) {
-            container.innerHTML = "<p>Der findes ingen ordrer endnu.</p>";
-            return;
-        }
-
-        const sortedOrders = orders.sort((a, b) => {
-            return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-        });
-
-        sortedOrders.forEach(order => {
-            container.appendChild(createOrderCard(order));
-        });
+        updateOrderCounts();
+        renderOrders();
 
     } catch (error) {
         console.error("Fejl ved hentning af ordrer:", error);
@@ -58,6 +57,109 @@ async function loadOrders() {
     }
 }
 
+function setupOrderFilters() {
+    const filterButtons = document.querySelectorAll(
+        ".order-filter-button"
+    );
+
+    filterButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            activeOrderFilter =
+                button.dataset.orderStatus || "ALL";
+
+            filterButtons.forEach(filterButton => {
+                filterButton.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            renderOrders();
+        });
+    });
+}
+
+
+function renderOrders() {
+    const container = document.getElementById(
+        "admin-orders-container"
+    );
+
+    if (!container) {
+        return;
+    }
+
+    const visibleOrders =
+        activeOrderFilter === "ALL"
+            ? allOrders
+            : allOrders.filter(order =>
+                order.status === activeOrderFilter
+            );
+
+    container.innerHTML = "";
+
+    if (visibleOrders.length === 0) {
+        container.innerHTML = `
+            <p class="empty-orders-message">
+                ${getEmptyFilterMessage()}
+            </p>
+        `;
+
+        return;
+    }
+
+    visibleOrders.forEach(order => {
+        container.appendChild(createOrderCard(order));
+    });
+}
+
+
+function updateOrderCounts() {
+    const counts = {
+        ALL: allOrders.length,
+        MODTAGET: 0,
+        KLAR: 0,
+        AFHENTET: 0
+    };
+
+    allOrders.forEach(order => {
+        if (Object.hasOwn(counts, order.status)) {
+            counts[order.status]++;
+        }
+    });
+
+    setOrderCount("order-count-all", counts.ALL);
+    setOrderCount(
+        "order-count-modtaget",
+        counts.MODTAGET
+    );
+    setOrderCount("order-count-klar", counts.KLAR);
+    setOrderCount(
+        "order-count-afhentet",
+        counts.AFHENTET
+    );
+}
+
+
+function setOrderCount(elementId, count) {
+    const element = document.getElementById(elementId);
+
+    if (element) {
+        element.textContent = count;
+    }
+}
+
+
+function getEmptyFilterMessage() {
+    const messages = {
+        ALL: "Der findes ingen ordrer endnu.",
+        MODTAGET: "Der er ingen modtagne ordrer.",
+        KLAR: "Der er ingen ordrer klar til afhentning.",
+        AFHENTET: "Der er ingen afhentede ordrer."
+    };
+
+    return messages[activeOrderFilter] ||
+        "Der findes ingen ordrer.";
+}
 
 function createOrderCard(order) {
     const card = document.createElement("article");

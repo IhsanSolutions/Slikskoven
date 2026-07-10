@@ -806,3 +806,74 @@ select:focus {
     }
 }
 
+/* ADMIN ORDER FILTERS */
+.order-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 30px;
+}
+
+.order-filter-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 18px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: none;
+    font-size: 14px;
+}
+
+.order-filter-button:hover {
+    border-color: var(--primary);
+}
+
+.order-filter-button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fffaf0;
+}
+
+.order-filter-button span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 25px;
+    height: 25px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.order-filter-button.active span {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fffaf0;
+}
+
+.order-status-modtaget {
+    background: #fff2cf;
+    color: #755000;
+}
+
+.order-status-klar {
+    background: #e4f5e9;
+    color: #28643a;
+}
+
+.order-status-afhentet {
+    background: #e9edf1;
+    color: #49545e;
+}
+
+.empty-orders-message {
+    padding: 30px;
+    text-align: center;
+    color: var(--muted);
+}
+
