@@ -3,122 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slikskoven | Slik, is, kaffe og bland-selv slikpose</title>
-    <meta name="description" content="Besøg Slikskoven og se vores udvalg af slik, is, kaffe, slushice og bland-selv slikposer til afhentning i butikken.">
+
+    <title>Slikskoven | Bland-selv slik, is, kaffe og slushice</title>
+
+    <meta
+            name="description"
+            content="Besøg Slikskoven eller bestil din egen bland-selv slikpose online til afhentning i butikken."
+    >
+
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="newdesign.css">
 </head>
-<body>
 
-<header>
-    <h1 onclick="window.location.href='forside.html'">Slikskoven</h1>
+<body class="candy-home">
 
-    <nav>
-        <a href="forside.html">Forside</a>
+<a class="skip-link" href="#main-content">
+    Gå til indhold
+</a>
+
+<div class="announcement-bar">
+    <span aria-hidden="true"></span>
+
+    <p>
+        Bland din egen slikpose online og afhent den i butikken
+    </p>
+
+    <span aria-hidden="true"></span>
+</div>
+
+<header class="site-header">
+    <a class="brand" href="forside.html" aria-label="Gå til Slikskovens forside">
+        <span class="brand-icon" aria-hidden="true">
+            S
+        </span>
+
+        <span class="brand-text">
+            <strong>Slikskoven</strong>
+            <small>Slik, is & hygge</small>
+        </span>
+    </a>
+
+    <nav aria-label="Primær navigation">
+        <a class="active" href="forside.html">Forside</a>
         <a href="news.html">Nyheder</a>
         <a href="products.html">Produkter</a>
-        <a href="order.html">Min slikpose</a>
+        <a class="bag-nav-link" href="order.html">
+            Min slikpose
+        </a>
     </nav>
 </header>
 
-<main>
-    <section class="landing-hero">
-        <p class="eyebrow">Slik, is og kaffe i lokalområdet</p>
+<main id="main-content" class="home-main">
 
-        <h2>En moderne slikbutik med klassiske favoritter.</h2>
+    <section class="candy-hero">
+        <div class="hero-copy">
+            <p class="hero-kicker">
+                <span aria-hidden="true">✦</span>
+                Velkommen til noget sødere
+            </p>
 
-        <p class="hero-text">
-            Hos Slikskoven kan du udforske vores udvalg af slik, is, kaffe, slushice og Ben & Jerry’s.
-            Du kan også sammensætte din egen slikpose online og afhente den i butikken.
-        </p>
+            <h1>
+                Træd ind i
+                <span>Slikskoven</span>
+            </h1>
 
-        <div class="hero-actions">
-            <a href="products.html" class="primary-link">Se produkter</a>
-            <a href="order.html" class="secondary-link">Bestil slikpose</a>
+            <p class="hero-description">
+                Fyld posen med dine favoritter, gå på opdagelse i vores
+                udvalg eller bestil online og hent din slikpose færdigpakket.
+            </p>
+
+            <div class="hero-actions">
+                <a class="candy-button candy-button-primary" href="order.html">
+                    Bland min slikpose
+                    <span aria-hidden="true">→</span>
+                </a>
+
+                <a class="candy-button candy-button-secondary" href="products.html">
+                    Se vores udvalg
+                </a>
+            </div>
+
+            <div class="hero-benefits">
+                <span>
+                    <strong>✓</strong>
+                    Nem onlinebestilling
+                </span>
+
+                <span>
+                    <strong>✓</strong>
+                    Afhentning i butikken
+                </span>
+
+                <span>
+                    <strong>✓</strong>
+                    Noget for enhver smag
+                </span>
+            </div>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+            <div class="hero-label">
+                <strong>Bland selv</strong>
+                <span>Præcis som du vil</span>
+            </div>
+
+            <div class="floating-candy candy-one"></div>
+            <div class="floating-candy candy-two"></div>
+            <div class="floating-candy candy-three"></div>
+            <div class="floating-candy candy-four"></div>
+
+            <div class="candy-bag">
+                <div class="bag-top"></div>
+
+                <div class="bag-content">
+                    <span class="bag-logo">S</span>
+                    <strong>Slikskoven</strong>
+                    <small>Din pose. Dine favoritter.</small>
+                </div>
+
+                <div class="bag-candy bag-candy-one"></div>
+                <div class="bag-candy bag-candy-two"></div>
+                <div class="bag-candy bag-candy-three"></div>
+                <div class="bag-candy bag-candy-four"></div>
+                <div class="bag-candy bag-candy-five"></div>
+            </div>
         </div>
     </section>
 
-    <section class="landing-grid">
-        <article class="landing-card">
-            <h3>Bland din egen slikpose</h3>
-            <p>
-                Vælg dine favoritter direkte på hjemmesiden, send din bestilling og afhent posen færdigpakket.
-            </p>
-            <a href="order.html">Start bestilling</a>
-        </article>
+    <section class="category-band" aria-label="Produktkategorier">
 
-        <article class="landing-card">
-            <h3>Produkter og priser</h3>
-            <p>
-                Se vores udvalg af slik, gelatinefri varianter, kaffe, is, softice, slushice og Ben & Jerry’s.
-            </p>
-            <a href="products.html">Se udvalg</a>
-        </article>
+        <a class="category-card category-card-pink" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <path d="M35 48 18 37v46l17-11" class="icon-fill-light"/>
+                    <path d="m85 48 17-11v46L85 72" class="icon-fill-light"/>
+                    <rect x="32" y="38" width="56" height="44" rx="20" class="icon-fill"/>
+                    <path d="M47 54c8-8 18-8 26 0M47 67c8 8 18 8 26 0" class="icon-line"/>
+                </svg>
+            </div>
 
-        <article class="landing-card">
-            <h3>Nyheder og tilbud</h3>
-            <p>
-                Følg med i nye varer, arrangementer og aktuelle tilbud fra butikken.
-            </p>
-            <a href="news.html">Læs nyheder</a>
-        </article>
-    </section>
-
-    <section class="info-section">
-        <p class="eyebrow">Find butikken</p>
-        <h2>Besøg Slikskoven</h2>
-
-        <p>
-            Kig forbi butikken og oplev vores udvalg i hyggelige omgivelser.
-        </p>
-
-        <div class="store-info">
-            <p><strong>Adresse:</strong> Brøndbyøster Torv 12, 2605 Brøndby</p>
-            <p><strong>Telefon:</strong> Indsæt telefonnummer her</p>
-            <p><strong>Åbningstider:</strong> Mandag: 10-21
-                Tirsdag: 11-21
-                Onsdag: 11-21
-                Torsdag: 11-21
-                Fredag: 11-22
-                Lørdag: 11-22
-                Søndag: 11-21</p>
-        </div>
-
-        <a
-                class="primary-link"
-                href="https://www.google.com/maps/search/?api=1&query=Slikskoven"
-                target="_blank"
-                rel="noopener noreferrer">
-            Åbn i Google Maps
+            <div class="category-content">
+                <strong>Bland-selv slik</strong>
+                <span>Find dine favoritter</span>
+            </div>
         </a>
+
+        <a class="category-card category-card-yellow" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <path d="M43 58h34l-7 45H50z" class="icon-fill-light"/>
+                    <path d="M44 58c-12-11-4-25 9-24-2-15 21-18 24-3 13 0 18 17 7 27z"
+                          class="icon-fill"/>
+                    <path d="M48 70h24M51 82h18" class="icon-line"/>
+                </svg>
+            </div>
+
+            <div class="category-content">
+                <strong>Softice</strong>
+                <span>Blød og cremet</span>
+            </div>
+        </a>
+
+        <a class="category-card category-card-purple" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <path d="M37 41h46l-6 61H43z" class="icon-fill-light"/>
+                    <path d="M33 41h54" class="icon-line"/>
+                    <path d="m69 41 12-25" class="icon-line"/>
+                    <path d="M48 56c10 8 18-8 28 0v28c-10-8-18 8-28 0z" class="icon-fill"/>
+                </svg>
+            </div>
+
+            <div class="category-content">
+                <strong>Slushice</strong>
+                <span>Kold og farverig</span>
+            </div>
+        </a>
+
+        <a class="category-card category-card-mint" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <path d="M31 69h58l-10 33H41z" class="icon-fill-light"/>
+                    <circle cx="46" cy="59" r="21" class="icon-fill"/>
+                    <circle cx="73" cy="56" r="24" class="icon-fill"/>
+                    <path d="M42 82h38" class="icon-line"/>
+                </svg>
+            </div>
+
+            <div class="category-content">
+                <strong>Is</strong>
+                <span>Klassiske favoritter</span>
+            </div>
+        </a>
+
+        <a class="category-card category-card-coffee" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <path d="M30 45h54v38c0 13-10 22-22 22H52c-12 0-22-9-22-22z"
+                          class="icon-fill-light"/>
+                    <path d="M84 55h8c13 0 13 23 0 23h-8" class="icon-line"/>
+                    <path d="M45 30c-7-8 7-11 0-19M61 30c-7-8 7-11 0-19M77 30c-7-8 7-11 0-19"
+                          class="icon-line"/>
+                    <path d="M37 58h40" class="icon-line"/>
+                </svg>
+            </div>
+
+            <div class="category-content">
+                <strong>Kaffe</strong>
+                <span>Varm og friskbrygget</span>
+            </div>
+        </a>
+
+        <a class="category-card category-card-orange" href="products.html">
+            <div class="category-visual">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <ellipse cx="60" cy="79" rx="43" ry="18" class="icon-fill-light"/>
+                    <ellipse cx="60" cy="68" rx="37" ry="16" class="icon-fill"/>
+                    <ellipse cx="60" cy="57" rx="31" ry="14" class="icon-fill-light"/>
+                    <path d="M54 39c5-11 13-17 23-19" class="icon-line"/>
+                    <circle cx="80" cy="18" r="6" class="icon-fill"/>
+                </svg>
+            </div>
+
+            <div class="category-content">
+                <strong>Pandekager</strong>
+                <span>Søde og lune</span>
+            </div>
+        </a>
+
     </section>
 
-    <section class="trust-section">
-        <h2>Trygt, nemt og overskueligt</h2>
+    <section class="experience-section">
+        <div class="section-heading">
+            <p class="section-kicker">Vælg din vej gennem skoven</p>
 
-        <div class="landing-grid">
-            <article class="landing-card">
-                <h3>Fødevarekontrol</h3>
+            <h2>
+                Hvad har du lyst til?
+            </h2>
+
+            <p>
+                Bestil din pose hjemmefra, udforsk sortimentet eller se,
+                hvad der sker i butikken.
+            </p>
+        </div>
+
+        <div class="experience-grid">
+            <article class="experience-card experience-card-pink">
+                <div class="card-number">01</div>
+
+                <div class="card-icon" aria-hidden="true">
+                    🍭
+                </div>
+
+                <h3>Bland din egen pose</h3>
+
                 <p>
-                    Kunder kan finde relevante oplysninger om fødevarekontrol og hygiejne.
+                    Vælg produkter og mængder, eller skriv en kommentar
+                    med dine ønsker, så pakker vi posen for dig.
                 </p>
+
+                <a href="order.html">
+                    Start din bestilling
+                    <span aria-hidden="true">→</span>
+                </a>
             </article>
 
-            <article class="landing-card">
-                <h3>Nem afhentning</h3>
+            <article class="experience-card experience-card-yellow">
+                <div class="card-number">02</div>
+
+                <div class="card-icon" aria-hidden="true">
+                    🍬
+                </div>
+
+                <h3>Udforsk sortimentet</h3>
+
                 <p>
-                    Bestil online og afhent din slikpose, når den er pakket og klar.
+                    Find slik, gelatinefri varianter, is, kaffe,
+                    slushice, softice og meget mere.
                 </p>
+
+                <a href="products.html">
+                    Se alle produkter
+                    <span aria-hidden="true">→</span>
+                </a>
             </article>
 
-            <article class="landing-card">
-                <h3>Udvalg til alle</h3>
+            <article class="experience-card experience-card-mint">
+                <div class="card-number">03</div>
+
+                <div class="card-icon" aria-hidden="true">
+                    ✨
+                </div>
+
+                <h3>Nyheder & tilbud</h3>
+
                 <p>
-                    Slikket opdeles tydeligt, blandt andet i gelatinefri og med gelatine.
+                    Følg med i nye produkter, særlige arrangementer
+                    og aktuelle tilbud fra Slikskoven.
                 </p>
+
+                <a href="news.html">
+                    Se seneste nyt
+                    <span aria-hidden="true">→</span>
+                </a>
             </article>
         </div>
     </section>
+
+    <section class="store-section">
+        <div class="store-introduction">
+            <p class="section-kicker">Besøg os i virkeligheden</p>
+
+            <h2>
+                Din lokale slikdestination
+            </h2>
+
+            <p>
+                Kig forbi Slikskoven på Brøndbyøster Torv og gå på
+                opdagelse blandt vores mange søde, sure, kolde og varme
+                favoritter.
+            </p>
+
+            <div class="store-address">
+                <span class="address-icon" aria-hidden="true">⌖</span>
+
+                <div>
+                    <strong>Slikskoven</strong>
+                    <p>Brøndbyøster Torv 12</p>
+                    <p>2605 Brøndby</p>
+                </div>
+            </div>
+
+            <a
+                    class="candy-button candy-button-dark"
+                    href="https://www.google.com/maps/search/?api=1&query=Slikskoven"
+                    target="_blank"
+                    rel="noopener noreferrer"
+            >
+                Find vej til butikken
+                <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+
+        <div class="opening-hours-card">
+            <div class="hours-card-heading">
+                <span aria-hidden="true">🕒</span>
+
+                <div>
+                    <p>Hvornår kan du besøge os?</p>
+                    <h3>Åbningstider</h3>
+                </div>
+            </div>
+
+            <dl class="opening-hours">
+                <div>
+                    <dt>Mandag</dt>
+                    <dd>10.00 – 21.00</dd>
+                </div>
+
+                <div>
+                    <dt>Tirsdag</dt>
+                    <dd>11.00 – 21.00</dd>
+                </div>
+
+                <div>
+                    <dt>Onsdag</dt>
+                    <dd>11.00 – 21.00</dd>
+                </div>
+
+                <div>
+                    <dt>Torsdag</dt>
+                    <dd>11.00 – 21.00</dd>
+                </div>
+
+                <div class="long-day">
+                    <dt>Fredag</dt>
+                    <dd>11.00 – 22.00</dd>
+                </div>
+
+                <div class="long-day">
+                    <dt>Lørdag</dt>
+                    <dd>11.00 – 22.00</dd>
+                </div>
+
+                <div>
+                    <dt>Søndag</dt>
+                    <dd>11.00 – 21.00</dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+
+    <section class="trust-banner">
+        <div>
+            <span aria-hidden="true">✓</span>
+
+            <p>
+                <strong>Bestil nemt</strong>
+                Din pose kan bestilles direkte på hjemmesiden.
+            </p>
+        </div>
+
+        <div>
+            <span aria-hidden="true">♡</span>
+
+            <p>
+                <strong>Pakket til dig</strong>
+                Vi gør din slikpose klar til afhentning.
+            </p>
+        </div>
+
+        <div>
+            <span aria-hidden="true">✦</span>
+
+            <p>
+                <strong>Udvalg til alle</strong>
+                Find også tydeligt markerede gelatinefri produkter.
+            </p>
+        </div>
+    </section>
+
 </main>
+
+<footer class="site-footer">
+    <div class="footer-brand">
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <div>
+            <strong>Slikskoven</strong>
+            <p>Et lidt sødere sted i lokalområdet.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="forside.html">Forside</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+        <a href="news.html">Nyheder</a>
+    </div>
+
+    <p class="footer-copy">
+        © Slikskoven
+    </p>
+</footer>
 
 <script src="api.js"></script>
 </body>
