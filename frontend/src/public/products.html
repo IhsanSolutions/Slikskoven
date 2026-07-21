@@ -3,67 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slikskoven - Produkter</title>
+
+    <title>Produkter | Slikskoven</title>
+
+    <meta
+            name="description"
+            content="Udforsk Slikskovens udvalg af slik, is, kaffe, slushice, softice, pandekager og gelatinefri produkter."
+    >
+
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="newdesign.css">
 </head>
-<body>
-<div id="toast" class="toast"></div>
-<header>
-    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'">Slikskoven</h1>
-    <nav>
+
+<body class="candy-page products-page">
+
+<a class="skip-link" href="#main-content">
+    Gå til produkter
+</a>
+
+<div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+></div>
+
+<div class="announcement-bar">
+    <span class="announcement-dot" aria-hidden="true"></span>
+
+    <p>
+        Vælg dine favoritter og tilføj dem direkte til din slikpose
+    </p>
+
+    <span class="announcement-dot" aria-hidden="true"></span>
+</div>
+
+<header class="site-header">
+    <a
+            class="brand"
+            href="forside.html"
+            aria-label="Gå til Slikskovens forside"
+    >
+        <span class="brand-icon" aria-hidden="true">
+            S
+        </span>
+
+        <span class="brand-text">
+            <strong>Slikskoven</strong>
+            <small>Slik, is & hygge</small>
+        </span>
+    </a>
+
+    <nav aria-label="Primær navigation">
         <a href="forside.html">Forside</a>
         <a href="news.html">Nyheder</a>
-        <a href="products.html">Produkter</a>
-        <a href="order.html">Min slikpose</a>
+        <a class="active" href="products.html">Produkter</a>
+        <a class="bag-nav-link" href="order.html">Min slikpose</a>
     </nav>
 </header>
 
-<main>
-    <h2>Vores Produkter</h2>
+<main id="main-content" class="catalog-main">
 
-    <div id="categories-container" class="categories-container">
-        <button class="category-btn active" data-category="alle" onclick="filterCategory('alle')">
-            <span class="category-label">Alle</span>
-        </button>
-        <button class="category-btn" data-category="CANDY" onclick="filterCategory('CANDY')">
-            <span class="category-label">Slik</span>
-        </button>
-        <button class="category-btn" data-category="ICE_CREAM" onclick="filterCategory('ICE_CREAM')">
-            <span class="category-label">Is</span>
-        </button>
-        <button class="category-btn" data-category="COFFEE" onclick="filterCategory('COFFEE')">
-            <span class="category-label">Kaffe</span>
-        </button>
-        <button class="category-btn" data-category="SLUSH_ICE" onclick="filterCategory('SLUSH_ICE')">
-            <span class="category-label">Slush</span>
-        </button>
-        <button class="category-btn" data-category="SOFT_ICE" onclick="filterCategory('SOFT_ICE')">
-            <span class="category-label">Soft</span>
-        </button>
-        <button class="category-btn" data-category="PANCAKE" onclick="filterCategory('PANCAKE')">
-            <span class="category-label">Pandekager</span>
-        </button>
-        <button class="category-btn" data-category="BEN_AND_JERRYS" onclick="filterCategory('BEN_AND_JERRYS')">
-            <span class="category-label">B&J</span>
-        </button>
-        <button class="category-btn" data-category="gelatine-free" onclick="filterGelatineFree()">
-            <span class="category-label">Vegansk</span>
-        </button>
-    </div>
+    <section class="catalog-hero">
+        <div class="catalog-hero-copy">
+            <p class="catalog-kicker">
+                Gå på opdagelse
+            </p>
 
-    <div id="product-container">
-        <p>Henter produkter...</p>
-    </div>
+            <h1>
+                Find din næste
+                <span>favorit</span>
+            </h1>
+
+            <p class="catalog-description">
+                Udforsk vores udvalg af sødt, surt, koldt og varmt.
+                Filtrér efter kategori, se produktdetaljer og tilføj
+                dine favoritter direkte til din pose.
+            </p>
+
+            <div class="catalog-hero-actions">
+                <a
+                        class="candy-button candy-button-primary"
+                        href="#product-catalog"
+                >
+                    Se produkterne
+                    <span aria-hidden="true">↓</span>
+                </a>
+
+                <a
+                        class="candy-button candy-button-secondary"
+                        href="order.html"
+                >
+                    Gå til min slikpose
+                </a>
+            </div>
+
+            <div class="catalog-highlights">
+                <div>
+                    <strong>Bredt udvalg</strong>
+                    <span>Fra bland-selv slik til is og kaffe</span>
+                </div>
+
+                <div>
+                    <strong>Nem bestilling</strong>
+                    <span>Tilføj direkte til din onlinepose</span>
+                </div>
+
+                <div>
+                    <strong>Gelatinefri valg</strong>
+                    <span>Filtrér hurtigt efter dine behov</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="catalog-visual" aria-hidden="true">
+            <div class="catalog-orbit catalog-orbit-large"></div>
+            <div class="catalog-orbit catalog-orbit-small"></div>
+
+            <div class="catalog-candy catalog-candy-pink"></div>
+            <div class="catalog-candy catalog-candy-yellow"></div>
+            <div class="catalog-candy catalog-candy-purple"></div>
+            <div class="catalog-candy catalog-candy-mint"></div>
+
+            <div class="catalog-product-sign">
+                <span class="catalog-sign-label">Slikskoven</span>
+                <strong>MIX</strong>
+                <p>Vælg dine egne favoritter</p>
+            </div>
+        </div>
+    </section>
+
+    <section
+            id="product-catalog"
+            class="catalog-section"
+            aria-labelledby="catalog-title"
+    >
+        <div class="catalog-section-heading">
+            <div>
+                <p class="section-kicker">
+                    Hele sortimentet
+                </p>
+
+                <h2 id="catalog-title">
+                    Hvad har du lyst til?
+                </h2>
+
+                <p>
+                    Brug kategorierne til at finde det, du leder efter.
+                </p>
+            </div>
+
+            <a class="catalog-bag-link" href="order.html">
+                Se min slikpose
+                <span aria-hidden="true">→</span>
+            </a>
+        </div>
+
+        <div
+                id="categories-container"
+                class="categories-container"
+                aria-label="Filtrér produkter"
+        >
+            <button
+                    type="button"
+                    class="category-btn active"
+                    data-category="alle"
+                    onclick="filterCategory('alle')"
+            >
+                <span class="category-label">Alle produkter</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="CANDY"
+                    onclick="filterCategory('CANDY')"
+            >
+                <span class="category-label">Slik</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="ICE_CREAM"
+                    onclick="filterCategory('ICE_CREAM')"
+            >
+                <span class="category-label">Is</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="COFFEE"
+                    onclick="filterCategory('COFFEE')"
+            >
+                <span class="category-label">Kaffe</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="SLUSH_ICE"
+                    onclick="filterCategory('SLUSH_ICE')"
+            >
+                <span class="category-label">Slushice</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="SOFT_ICE"
+                    onclick="filterCategory('SOFT_ICE')"
+            >
+                <span class="category-label">Softice</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="PANCAKE"
+                    onclick="filterCategory('PANCAKE')"
+            >
+                <span class="category-label">Pandekager</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn"
+                    data-category="BEN_AND_JERRYS"
+                    onclick="filterCategory('BEN_AND_JERRYS')"
+            >
+                <span class="category-label">Ben & Jerry's</span>
+            </button>
+
+            <button
+                    type="button"
+                    class="category-btn category-btn-special"
+                    data-category="gelatine-free"
+                    onclick="filterGelatineFree()"
+            >
+                <span class="category-label">Uden gelatine</span>
+            </button>
+        </div>
+
+        <div id="product-container" class="product-catalog-grid">
+            <div class="catalog-loading-message">
+                <span class="catalog-loading-dot"></span>
+                <p>Henter produkter...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="catalog-cta">
+        <div>
+            <p class="section-kicker">
+                Fundet dine favoritter?
+            </p>
+
+            <h2>
+                Gør din slikpose færdig
+            </h2>
+
+            <p>
+                Se hvad du har tilføjet, vælg mængder og send din
+                bestilling til butikken.
+            </p>
+        </div>
+
+        <a
+                class="candy-button candy-button-primary"
+                href="order.html"
+        >
+            Fortsæt til min slikpose
+            <span aria-hidden="true">→</span>
+        </a>
+    </section>
+
 </main>
 
-<!-- Product Detail Modal -->
-<div id="product-modal" class="modal">
+<footer class="site-footer">
+    <div class="footer-brand">
+        <span class="brand-icon" aria-hidden="true">
+            S
+        </span>
+
+        <div>
+            <strong>Slikskoven</strong>
+            <p>Et lidt sødere sted i lokalområdet.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="forside.html">Forside</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+        <a href="news.html">Nyheder</a>
+    </div>
+
+    <p class="footer-copy">
+        © Slikskoven
+    </p>
+</footer>
+
+<div
+        id="product-modal"
+        class="modal product-detail-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+>
     <div class="modal-content">
-        <span class="close-btn" onclick="closeProductModal()">&times;</span>
+        <button
+                type="button"
+                class="close-btn"
+                onclick="closeProductModal()"
+                aria-label="Luk produktdetaljer"
+        >
+            &times;
+        </button>
+
         <div id="modal-body">
             <h2 id="modal-title"></h2>
+
             <div id="modal-details"></div>
-            <button class="modal-close-btn" onclick="closeProductModal()">Luk</button>
+
+            <button
+                    type="button"
+                    class="modal-close-btn"
+                    onclick="closeProductModal()"
+            >
+                Luk produktdetaljer
+            </button>
         </div>
     </div>
 </div>
