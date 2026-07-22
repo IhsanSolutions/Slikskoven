@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bestil din slikpose | Slikskoven</title>
+
+    <meta
+            name="description"
+            content="Sammensæt din egen slikpose eller beskriv dine ønsker, og bestil den til afhentning hos Slikskoven."
+    >
+
+    <link rel="stylesheet" href="/styles/shared.css">
+    <link rel="stylesheet" href="/styles/order.css">
+</head>
+
+<body class="candy-page order-page">
+
+<a class="skip-link" href="#main-content">
+    Gå til bestillingen
+</a>
+
+<div class="announcement-bar">
+    <span class="announcement-dot" aria-hidden="true"></span>
+
+    <p>
+        Bestil hjemmefra – vi pakker din pose klar til afhentning
+    </p>
+
+    <span class="announcement-dot" aria-hidden="true"></span>
+</div>
+
+<header class="site-header">
+    <a
+            class="brand"
+            href="forside.html"
+            aria-label="Gå til Slikskovens forside"
+    >
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <span class="brand-text">
+            <strong>Slikskoven</strong>
+            <small>Slik, is & hygge</small>
+        </span>
+    </a>
+
+    <nav aria-label="Primær navigation">
+        <a href="forside.html">Forside</a>
+        <a href="news.html">Nyheder</a>
+        <a href="products.html">Produkter</a>
+        <a class="bag-nav-link active" href="order.html">Min slikpose</a>
+    </nav>
+</header>
+
+<main id="main-content" class="order-main">
+
+    <section class="order-hero">
+        <div class="order-hero-copy">
+            <p class="order-kicker">
+                Din pose, dine favoritter
+            </p>
+
+            <h1>
+                Byg din helt egen
+                <span>slikpose</span>
+            </h1>
+
+            <p class="order-hero-description">
+                Vælg selv præcis, hvad der skal i posen, eller beskriv
+                dine ønsker, så sammensætter vi den for dig.
+            </p>
+
+            <div class="order-hero-steps" aria-label="Sådan fungerer bestillingen">
+                <div>
+                    <span>1</span>
+                    <p>
+                        <strong>Vælg metode</strong>
+                        Sammensæt selv eller skriv dine ønsker.
+                    </p>
+                </div>
+
+                <div>
+                    <span>2</span>
+                    <p>
+                        <strong>Indtast oplysninger</strong>
+                        Fortæl os, hvem bestillingen er til.
+                    </p>
+                </div>
+
+                <div>
+                    <span>3</span>
+                    <p>
+                        <strong>Send bestillingen</strong>
+                        Vi gør posen klar til afhentning.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-hero-art" aria-hidden="true">
+            <div class="order-art-ring"></div>
+
+            <div class="order-bag-illustration">
+                <div class="order-bag-handle"></div>
+
+                <div class="order-bag-brand">
+                    <span>S</span>
+                    <strong>Slikskoven</strong>
+                    <small>Blandet til dig</small>
+                </div>
+
+                <i class="order-sweet sweet-pink"></i>
+                <i class="order-sweet sweet-yellow"></i>
+                <i class="order-sweet sweet-mint"></i>
+                <i class="order-sweet sweet-purple"></i>
+                <i class="order-sweet sweet-red"></i>
+            </div>
+
+            <div class="order-art-label">
+                <strong>Klar til afhentning</strong>
+                <span>Når butikken har pakket din pose</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="order-workspace mix-studio" aria-labelledby="order-title">
+
+        <header class="mix-studio-header">
+            <div>
+                <p class="mix-studio-kicker">Slikskovens blandestation</p>
+
+                <h2 id="order-title">
+                    Byg din bestilling
+                </h2>
+
+                <p class="mix-studio-intro">
+                    Vælg hvordan posen skal blandes, udfyld dine oplysninger,
+                    og gennemgå bestillingen inden du sender den.
+                </p>
+            </div>
+
+            <a class="mix-products-link" href="products.html">
+                Se hele udvalget
+
+                <span aria-hidden="true">→</span>
+            </a>
+        </header>
+
+        <ol class="mix-progress" aria-label="Bestillingens trin">
+            <li class="mix-progress-active">
+                <span>1</span>
+
+                <div>
+                    <strong>Vælg metode</strong>
+                    <small>Hvordan skal vi blande?</small>
+                </div>
+            </li>
+
+            <li>
+                <span>2</span>
+
+                <div>
+                    <strong>Tilpas posen</strong>
+                    <small>Produkter eller beskrivelse</small>
+                </div>
+            </li>
+
+            <li>
+                <span>3</span>
+
+                <div>
+                    <strong>Send bestillingen</strong>
+                    <small>Oplysninger og kontrol</small>
+                </div>
+            </li>
+        </ol>
+
+        <div class="mix-choice-section">
+            <div class="mix-choice-heading">
+                <span class="mix-section-number">01</span>
+
+                <div>
+                    <p>Vælg fremgangsmåde</p>
+                    <h3>Hvordan vil du sammensætte din pose?</h3>
+                </div>
+            </div>
+
+            <div id="method-container" class="mix-method-grid">
+
+                <button
+                        type="button"
+                        class="method-btn mix-method-card mix-method-manual active"
+                        onclick="selectMethod('MANUAL', event); openSelectModal()"
+                        aria-label="Sammensæt selv din slikpose"
+                >
+                    <span class="mix-method-icon" aria-hidden="true">
+                        <svg viewBox="0 0 64 64">
+                            <path d="M18 22h28l-3 31H21z"></path>
+                            <path d="M24 22c0-9 4-14 8-14s8 5 8 14"></path>
+                            <circle cx="26" cy="37" r="4"></circle>
+                            <circle cx="39" cy="35" r="5"></circle>
+                            <circle cx="33" cy="46" r="4"></circle>
+                        </svg>
+                    </span>
+
+                    <span class="mix-method-content">
+                        <span class="mix-method-eyebrow">
+                            Du vælger indholdet
+                        </span>
+
+                        <strong>Sammensæt selv</strong>
+
+                        <small>
+                            Vælg de ønskede produkter, og angiv selv
+                            mængden i gram.
+                        </small>
+                    </span>
+
+                    <span class="mix-method-select" aria-hidden="true">
+                        <span></span>
+                    </span>
+                </button>
+
+                <button
+                        type="button"
+                        class="method-btn mix-method-card mix-method-comment"
+                        onclick="selectMethod('COMMENT', event); openCommentModal()"
+                        aria-label="Beskriv dine ønsker, så Slikskoven sammensætter posen"
+                >
+                    <span class="mix-method-icon" aria-hidden="true">
+                        <svg viewBox="0 0 64 64">
+                            <path d="M12 14h40v31H29L18 54v-9h-6z"></path>
+                            <path d="M21 25h22M21 33h16"></path>
+                        </svg>
+                    </span>
+
+                    <span class="mix-method-content">
+                        <span class="mix-method-eyebrow">
+                            Vi vælger indholdet
+                        </span>
+
+                        <strong>Beskriv dine ønsker</strong>
+
+                        <small>
+                            Fortæl os om størrelse, smag og præferencer,
+                            så sammensætter vi posen.
+                        </small>
+                    </span>
+
+                    <span class="mix-method-select" aria-hidden="true">
+                        <span></span>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="mix-studio-grid">
+
+            <div class="mix-form-column">
+
+                <section id="comment-section" class="mix-section-card mix-comment-section" style="display: none;">
+                    <div class="mix-card-heading">
+                        <span class="mix-section-number">02</span>
+
+                        <div>
+                            <p>Din ønskede blanding</p>
+                            <h3>Beskriv din pose</h3>
+                        </div>
+                    </div>
+
+                    <label class="visually-hidden" for="comment-input">Beskriv din ønskede slikpose</label>
+
+                    <textarea
+                            id="comment-input"
+                            placeholder="Eksempel: Cirka 300 g med mest surt slik, lidt chokolade og ingen lakrids."
+                    ></textarea>
+
+                    <div class="mix-comment-footer">
+                        <p>Nævn gerne vægt, smage og sliktyper.</p>
+
+                        <button type="button" class="mix-secondary-button" onclick="openCommentModal()">
+                            Skriv i større felt
+                        </button>
+                    </div>
+                </section>
+
+                <section id="contact-section" class="mix-section-card mix-contact-section">
+                    <div class="mix-card-heading">
+                        <span class="mix-section-number">02</span>
+
+                        <div>
+                            <p>Kontaktoplysninger</p>
+                            <h3>Hvem er bestillingen til?</h3>
+                        </div>
+                    </div>
+
+                    <div class="mix-contact-grid">
+                        <div class="mix-field">
+                            <label for="customer-name">
+                                Navn
+                            </label>
+
+                            <div class="mix-input-wrapper">
+                            <span aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M4 21c0-5 3-8 8-8s8 3 8 8"></path>
+                                </svg>
+                            </span>
+
+                                <input
+                                        type="text"
+                                        id="customer-name"
+                                        placeholder="Dit navn"
+                                        autocomplete="name"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mix-field">
+                            <label for="customer-phone">Telefonnummer</label>
+
+                            <div class="mix-input-wrapper">
+                            <span aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M7 3 4 5c0 8 7 15 15 15l2-3-5-3-2 2c-3-1-5-3-6-6l2-2z"></path>
+                                </svg>
+                            </span>
+
+                                <input
+                                        type="tel"
+                                        id="customer-phone"
+                                        placeholder="Dit telefonnummer"
+                                        autocomplete="tel"
+                                        inputmode="tel"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mix-privacy-note">
+                        <span aria-hidden="true">i</span>
+
+                        <p>Oplysningerne bruges kun til at identificere din bestilling.</p>
+                    </div>
+                </section>
+
+                <div
+                        id="error-message"
+                        class="order-error mix-order-error"
+                        role="alert"
+                        style="display: none;"
+                ></div>
+
+                <div class="mix-submit-area">
+                    <div class="mix-submit-copy">
+                        <strong>Klar til at sende?</strong>
+
+                        <span>
+                        Kontrollér din pose og dine oplysninger først.
+                    </span>
+                    </div>
+
+                    <button
+                            type="button"
+                            id="submit-btn"
+                            class="order-submit-button mix-submit-button"
+                            onclick="submitOrder()"
+                    >
+                        <span>Send bestillingen</span>
+
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+
+                <div id="confirmation" class="order-confirmation mix-confirmation" style="display: none;">
+                    <div class="confirmation-mark" aria-hidden="true">
+                        ✓
+                    </div>
+
+                    <div>
+                        <h3>Bestillingen er sendt</h3>
+
+                        <p>
+                            Vi har modtaget den og begynder at gøre den klar.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <aside
+                    id="manual-section"
+                    class="mix-bag-panel"
+                    aria-labelledby="bag-summary-title"
+            >
+                <div class="mix-bag-top">
+                    <div>
+                        <p>Din bestilling</p>
+
+                        <h3 id="bag-summary-title">
+                            Poseoversigt
+                        </h3>
+                    </div>
+
+                    <button type="button" class="mix-add-products-button" onclick="openSelectModal()">
+                        <span aria-hidden="true">+</span>
+                        Tilføj slik
+                    </button>
+                </div>
+
+                <div class="mix-bag-divider" aria-hidden="true">
+                    <span></span>
+                </div>
+
+                <div id="order-lines" class="order-lines-list mix-order-lines">
+                    <div class="mix-empty-bag">
+                        <div class="mix-empty-bag-icon" aria-hidden="true">
+                            <svg viewBox="0 0 64 64">
+                                <path d="M18 22h28l-3 31H21z"></path>
+                                <path d="M24 22c0-9 4-14 8-14s8 5 8 14"></path>
+                            </svg>
+                        </div>
+
+                        <strong>Posen er stadig tom</strong>
+
+                        <p>Tilføj produkter for at begynde din bestilling.</p>
+
+                        <button type="button" onclick="openSelectModal()">Vælg produkter</button>
+                    </div>
+                </div>
+
+                <div class="mix-bag-divider" aria-hidden="true">
+                    <span></span>
+                </div>
+
+                <div class="mix-total-section">
+                    <div>
+                        <span>Samlet pris</span>
+                        <small>Beregnet ud fra dine valgte produkter</small>
+                    </div>
+
+                    <div id="total-price">Total: 0.00 kr.</div>
+                </div>
+
+                <div class="mix-bag-note">
+                    <span aria-hidden="true">i</span>
+
+                    <p>
+                        Prisen beregnes ud fra butikkens aktuelle produktpriser.
+                    </p>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <section class="order-trust-strip">
+        <div>
+            <span class="trust-line-icon" aria-hidden="true">01</span>
+            <p>
+                <strong>Bestil online</strong>
+                Vælg produkter eller beskriv din pose.
+            </p>
+        </div>
+
+        <div>
+            <span class="trust-line-icon" aria-hidden="true">02</span>
+            <p><strong>Vi pakker den</strong> Butikken forbereder din bestilling.</p>
+        </div>
+
+        <div>
+            <span class="trust-line-icon" aria-hidden="true">03</span>
+            <p>
+                <strong>Afhent i butikken</strong>
+                Hent din færdige pose hos Slikskoven.
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="footer-brand">
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <div>
+            <strong>Slikskoven</strong>
+            <p>Et lidt sødere sted i lokalområdet.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="forside.html">Forside</a>
+        <a href="products.html">Produkter</a>
+        <a href="order.html">Bestil</a>
+        <a href="news.html">Nyheder</a>
+    </div>
+
+    <p class="footer-copy">© Slikskoven</p>
+</footer>
+
+<div
+        id="select-modal"
+        class="modal order-selection-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="select-modal-title"
+>
+    <div class="modal-content">
+        <button
+                type="button"
+                class="close-btn"
+                onclick="closeSelectModal()"
+                aria-label="Luk produktvælgeren"
+        >
+            &times;
+        </button>
+
+        <div class="order-modal-heading">
+            <p class="section-kicker">Vælg indhold</p>
+            <h3 id="select-modal-title">Tilføj slik til din pose</h3>
+            <p>Indtast antal gram ved de produkter, du ønsker.</p>
+        </div>
+
+        <div id="select-modal-items"></div>
+    </div>
+</div>
+
+<div
+        id="comment-modal"
+        class="modal order-comment-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="comment-modal-title"
+>
+    <div class="modal-content">
+        <button
+                type="button"
+                class="close-btn"
+                onclick="closeCommentModal()"
+                aria-label="Luk kommentarfeltet"
+        >
+            &times;
+        </button>
+
+        <div class="order-modal-heading">
+            <p class="section-kicker">Beskriv din pose</p>
+            <h3 id="comment-modal-title">Hvad har du lyst til?</h3>
+            <p>Skriv gerne ønsket vægt, smage og typer af slik.</p>
+        </div>
+
+        <label class="visually-hidden" for="modal-comment">
+            Beskriv din ønskede slikpose
+        </label>
+
+        <textarea
+                id="modal-comment"
+                placeholder="Eksempel: En pose på cirka 300 g med mest surt slik, lidt chokolade og ingen lakrids."
+        ></textarea>
+
+        <button type="button" class="save-comment-button" onclick="saveComment()">Gem min beskrivelse</button>
+    </div>
+</div>
+
+<script src="/js/shared/api.js"></script>
+<script src="/js/pages/order.js"></script>
+</body>
+</html>

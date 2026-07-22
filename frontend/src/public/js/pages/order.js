@@ -1,28 +1,47 @@
 let selectedMethod = "MANUAL";
 let orderLines = [];
 let allProducts = [];
-
+let productsLoadPromise = null;
 
 // ==================================================
 // LOAD PRODUCTS
 // ==================================================
 
 async function loadProducts() {
-    try {
-        allProducts = await fetchData("products");
-        showProductList(allProducts);
-
-    } catch (error) {
-        const productList = document.getElementById("product-list");
-
-        if (productList) {
-            productList.innerHTML = "<p>Kunne ikke hente produkter.</p>";
-        }
-
-        console.error("Kunne ikke hente produkter:", error);
+    if (productsLoadPromise) {
+        return productsLoadPromise;
     }
-}
 
+    productsLoadPromise = (async () => {
+        try {
+            const products = await fetchData("products");
+
+            allProducts = Array.isArray(products) ? products : [];
+
+            showProductList(allProducts);
+
+            return allProducts;
+
+        } catch (error) {
+            allProducts = [];
+
+            const productList = document.getElementById("product-list");
+
+            if (productList) {
+                productList.innerHTML = "<p>Kunne ikke hente produkter.</p>";
+            }
+
+            console.error("Kunne ikke hente produkter:", error);
+
+            return [];
+
+        } finally {
+            productsLoadPromise = null;
+        }
+    })();
+
+    return productsLoadPromise;
+}
 
 // ==================================================
 // OPTIONAL PRODUCT LIST
@@ -155,22 +174,13 @@ function loadBagFromStorage() {
 // ==================================================
 
 function removeFromOrder(productId) {
-    orderLines = orderLines.filter(
-        line => String(line.product.productId) !== String(productId)
-    );
+    orderLines = orderLines.filter(line => String(line.product.productId) !== String(productId));
 
-    let bag =
-        JSON.parse(localStorage.getItem("slikpose")) ||
-        [];
+    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
 
-    bag = bag.filter(
-        item => String(item.productId) !== String(productId)
-    );
+    bag = bag.filter(item => String(item.productId) !== String(productId));
 
-    localStorage.setItem(
-        "slikpose",
-        JSON.stringify(bag)
-    );
+    localStorage.setItem("slikpose", JSON.stringify(bag));
 
     updateOrderSummary();
 }
@@ -182,6 +192,7 @@ function removeFromOrder(productId) {
 
 function updateOrderSummary() {
     const container = document.getElementById("order-lines");
+
     const totalContainer = document.getElementById("total-price");
 
     if (!container || !totalContainer) {
@@ -190,46 +201,79 @@ function updateOrderSummary() {
 
     if (orderLines.length === 0) {
         container.innerHTML = `
-            <p class="ingen-nyheder">
-                Ingen produkter valgt endnu.
-            </p>
+            <div class="mix-empty-bag">
+                <div class="mix-empty-bag-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64">
+                        <path d="M18 22h28l-3 31H21z"></path>
+                        <path d="M24 22c0-9 4-14 8-14s8 5 8 14"></path>
+                    </svg>
+                </div>
+
+                <strong>Din pose er tom</strong>
+
+                <p>Tilføj nogle af dine favoritter for at starte bestillingen.</p>
+
+                <button type="button" onclick="openSelectModal()">Vælg produkter</button>
+            </div>
         `;
 
-        totalContainer.textContent = "Total: 0.00 kr.";
+        totalContainer.textContent = "0.00 kr.";
+
         return;
     }
 
-    container.innerHTML = "";
-
     let total = 0;
 
-    orderLines.forEach(line => {
-        total += line.linePrice;
+    container.innerHTML = orderLines
+        .map(line => {
+            total += Number(line.linePrice);
 
-        container.innerHTML += `
-            <div class="order-line-item">
-                <span>${escapeHtml(line.product.name)}</span>
+            const productName = String(line.product.name || "Produkt");
 
-                <span>
-                    ${line.quantityGrams}g
-                </span>
+            const imageUrl = normalizeImageUrl(line.product.imageUrl);
 
-                <span>
-                    ${formatPrice(line.linePrice)} kr.
-                </span>
+            const visual = imageUrl
+                ? `
+                    <img src="${escapeHtml(imageUrl)}" alt="" loading="lazy">
+                `
+                : `
+                    <span aria-hidden="true">
+                        ${escapeHtml(productName.charAt(0).toUpperCase())}
+                    </span>
+                `;
 
-                <button
-                    type="button"
-                    onclick="removeFromOrder('${line.product.productId}')"
-                >
-                    Fjern
-                </button>
-            </div>
-        `;
-    });
+            return `
+                <article class="order-line-item">
+                    <div class="order-item-visual">
+                        ${visual}
+                    </div>
 
-    totalContainer.textContent =
-        `Total: ${formatPrice(total)} kr.`;
+                    <div class="order-item-details">
+                        <strong>
+                            ${escapeHtml(productName)}
+                        </strong>
+
+                        <span> ${line.quantityGrams} g</span>
+                    </div>
+
+                    <strong class="order-item-price">
+                        ${formatPrice(line.linePrice)} kr.
+                    </strong>
+
+                    <button
+                        type="button"
+                        class="order-item-remove"
+                        onclick="removeFromOrder('${line.product.productId}')"
+                        aria-label="Fjern ${escapeHtml(productName)} fra posen"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </article>
+            `;
+        })
+        .join("");
+
+    totalContainer.textContent = `${formatPrice(total)} kr.`;
 }
 
 
@@ -321,60 +365,71 @@ function saveComment() {
 // SELECT MODAL
 // ==================================================
 
-function openSelectModal() {
+async function openSelectModal() {
     setOrderMethod("MANUAL");
 
     const modal = document.getElementById("select-modal");
+
     const container = document.getElementById("select-modal-items");
 
     if (!modal || !container) {
         return;
     }
 
-    container.innerHTML = "";
+    modal.style.display = "block";
 
-    if (!Array.isArray(allProducts) || allProducts.length === 0) {
+    container.innerHTML = `
+        <div class="select-products-state">
+            <span class="select-products-spinner" aria-hidden="true"></span>
+
+            <strong>Henter produkter</strong>
+
+            <p> Et øjeblik – vi finder butikkens udvalg.</p>
+        </div>
+    `;
+
+    const products = allProducts.length > 0 ? allProducts : await loadProducts();
+
+    if (!Array.isArray(products) || products.length === 0) {
         container.innerHTML = `
-            <p>
-                Der kunne ikke findes nogen produkter.
-            </p>
+            <div class="select-products-state select-products-error">
+                <strong>Produkterne kunne ikke hentes</strong>
+
+                <p> Prøv at hente butikkens udvalg igen.</p>
+
+                <button type="button" class="select-products-retry" onclick="openSelectModal()">Prøv igen</button>
+            </div>
         `;
 
-        modal.style.display = "block";
         return;
     }
 
-    allProducts.forEach(product => {
-        container.innerHTML += `
+    container.innerHTML = products
+        .map(product => `
             <div class="modal-product-card">
-                <div>
-                    <strong>${escapeHtml(product.name)}</strong>
+                <div class="modal-product-information">
+                    <strong>
+                        ${escapeHtml(product.name)}
+                    </strong>
 
                     <p>
-                        ${formatPrice(product.price)} kr. / 100g
+                        ${formatPrice(product.price)}
+                        kr. / 100 g
                     </p>
                 </div>
 
                 <div class="add-box">
-                    <input
-                        type="number"
-                        id="modal-gram-${product.productId}"
-                        placeholder="gram"
-                        min="1"
-                    >
+                    <label class="visually-hidden" for="modal-gram-${product.productId}">
+                        Antal gram af ${escapeHtml(product.name)}
+                    </label>
 
-                    <button
-                        type="button"
-                        onclick="addFromModal(${product.productId})"
-                    >
-                        Tilføj
-                    </button>
+                    <input type="number" id="modal-gram-${product.productId}" placeholder="Gram" min="1">
+
+                    <button type="button" onclick="addFromModal(${product.productId})">Tilføj</button>
                 </div>
             </div>
-        `;
-    });
-
-    modal.style.display = "block";
+        `)
+        .join("");
 }
 
 
@@ -601,6 +656,24 @@ function showError(message) {
 // ==================================================
 // HELPERS
 // ==================================================
+
+function normalizeImageUrl(imageUrl) {
+    const value = String(imageUrl || "").trim();
+
+    if (!value) {
+        return "";
+    }
+
+    if (
+        value.startsWith("/") ||
+        value.startsWith("http://") ||
+        value.startsWith("https://")
+    ) {
+        return value;
+    }
+
+    return `/${value}`;
+}
 
 function formatPrice(price) {
     const numericPrice = Number(price);

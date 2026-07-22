@@ -1,0 +1,121 @@
+/* ==================================================
+   AUTH.CSS — LOGIN OG REGISTRERING
+   ================================================== */
+
+/* ==================================================
+   LOGIN OG REGISTRERING
+   ================================================== */
+
+body:has(#login-form),
+body:has(#register-form) {
+    background:
+            radial-gradient(
+                    circle at 18% 18%,
+                    rgba(255, 91, 141, 0.13),
+                    transparent 27%
+            ),
+            radial-gradient(
+                    circle at 85% 70%,
+                    rgba(128, 104, 245, 0.12),
+                    transparent 28%
+            ),
+            var(--candy-cream);
+}
+
+body:has(#login-form) main,
+body:has(#register-form) main {
+    width: min(540px, calc(100% - 28px));
+    padding: 55px 0 80px;
+}
+
+body:has(#login-form) main > section,
+body:has(#register-form) main > section {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(28px, 6vw, 45px);
+    border: 1px solid var(--candy-border);
+    border-radius: 32px;
+    background: rgba(255, 253, 247, 0.96);
+    box-shadow: 0 28px 70px rgba(18, 63, 53, 0.14);
+}
+
+body:has(#login-form) main > section::before,
+body:has(#register-form) main > section::before {
+    content: "S";
+    width: 58px;
+    height: 58px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px 20px 20px 7px;
+    background: linear-gradient(
+            145deg,
+            var(--candy-pink),
+            var(--candy-purple)
+    );
+    color: white;
+    font-size: 30px;
+    font-weight: 900;
+    box-shadow: 0 12px 28px rgba(128, 104, 245, 0.22);
+    transform: rotate(-4deg);
+}
+
+body:has(#login-form) main h2,
+body:has(#register-form) main h2 {
+    margin-bottom: 10px;
+    color: var(--candy-forest);
+    font-size: clamp(36px, 7vw, 52px);
+    line-height: 1;
+    letter-spacing: -2.5px;
+    text-align: left;
+}
+
+body:has(#login-form) main > section > p,
+body:has(#register-form) main > section > p {
+    margin-bottom: 22px;
+}
+
+#login-form,
+#register-form,
+#edit-news-form,
+#edit-product-form {
+    display: grid;
+    gap: 7px;
+}
+
+#login-form label,
+#register-form label {
+    margin-top: 7px;
+}
+
+#login-form button,
+#register-form button {
+    width: 100%;
+    margin-top: 12px;
+    background: var(--candy-forest);
+}
+
+#login-form button:hover,
+#register-form button:hover {
+    background: var(--candy-pink);
+}
+
+#login-message,
+#register-message {
+    margin-bottom: 18px;
+    padding: 13px 15px;
+    border: 1px solid rgba(240, 76, 95, 0.28);
+    border-radius: 14px;
+    background: #fff0f2;
+    color: #8d2532;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+body:has(#login-form) main a,
+body:has(#register-form) main a {
+    color: var(--candy-pink-dark);
+    font-weight: 900;
+}
