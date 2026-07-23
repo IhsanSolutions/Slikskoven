@@ -141,11 +141,7 @@ function createNewsImage(news, escapedTitle) {
     const imageUrl = normalizeNewsImageUrl(news.imageUrl);
 
     if (!imageUrl) {
-        return `
-            <div class="news-card-placeholder" aria-hidden="true">
-                <span class="news-placeholder-board">S</span>
-            </div>
-        `;
+        return createNewsPlaceholder();
     }
 
     return `
@@ -153,8 +149,31 @@ function createNewsImage(news, escapedTitle) {
             src="${escapeHtml(imageUrl)}"
             alt="${escapedTitle}"
             loading="lazy"
+            onerror="handleBrokenNewsImage(this)"
         >
     `;
+}
+
+
+function createNewsPlaceholder() {
+    return `
+        <div class="news-card-placeholder" aria-hidden="true">
+            <span class="news-placeholder-board">S</span>
+        </div>
+    `;
+}
+
+
+function handleBrokenNewsImage(imageElement) {
+    const mediaContainer =
+        imageElement.closest(".news-card-media");
+
+    if (!mediaContainer) {
+        imageElement.remove();
+        return;
+    }
+
+    mediaContainer.innerHTML = createNewsPlaceholder();
 }
 
 
@@ -166,14 +185,28 @@ function normalizeNewsImageUrl(imageUrl) {
     }
 
     if (
-        value.startsWith("/") ||
         value.startsWith("http://") ||
         value.startsWith("https://")
     ) {
         return value;
     }
 
-    return `/${value}`;
+    if (value.startsWith("/assets/")) {
+        return value;
+    }
+
+    if (value.startsWith("assets/")) {
+        return `/${value}`;
+    }
+
+    const isImageFilename =
+        /\.(png|jpe?g|webp|gif)$/i.test(value);
+
+    if (isImageFilename && !value.includes("/")) {
+        return `/assets/news/${value}`;
+    }
+
+    return "";
 }
 
 

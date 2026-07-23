@@ -255,14 +255,14 @@ body > header:not(.site-header) nav button {
 
 /* Standardmain til simple sider */
 
-body > main:not(.home-main):not(.catalog-main):not(.order-main) {
+body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) {
     width: min(1120px, calc(100% - 32px));
     max-width: none;
     margin: 0 auto;
     padding: 58px 0 80px;
 }
 
-body > main:not(.home-main):not(.catalog-main):not(.order-main) > h2 {
+body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) > h2 {
     margin-bottom: 28px;
     color: var(--candy-forest);
     font-size: clamp(38px, 6vw, 66px);
@@ -271,7 +271,7 @@ body > main:not(.home-main):not(.catalog-main):not(.order-main) > h2 {
     text-align: left;
 }
 
-body > main:not(.home-main):not(.catalog-main):not(.order-main) > section {
+body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) > section {
     margin-bottom: 26px;
     padding: 28px;
     border: 1px solid var(--candy-border);
@@ -452,17 +452,17 @@ body > main p {
         font-size: 12px;
     }
 
-    body > main:not(.home-main):not(.catalog-main):not(.order-main) {
+    body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) {
         width: min(100% - 22px, 1120px);
         padding-top: 28px;
     }
 
-    body > main:not(.home-main):not(.catalog-main):not(.order-main) > h2 {
+    body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) > h2 {
         font-size: 40px;
         letter-spacing: -2px;
     }
 
-    body > main:not(.home-main):not(.catalog-main):not(.order-main) > section {
+    body > main:not(.home-main):not(.catalog-main):not(.order-main):not(.news-main) > section {
         padding: 22px 17px;
         border-radius: 22px;
     }
