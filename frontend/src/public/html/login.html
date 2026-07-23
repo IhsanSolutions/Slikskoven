@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="da">
-
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Log ind - Slikskoven</title>
+    <title>Log ind | Slikskoven</title>
+
+    <meta
+            name="description"
+            content="Log ind på din Slikskoven-konto."
+    >
 
     <link rel="stylesheet" href="/styles/shared.css">
     <link rel="stylesheet" href="/styles/auth.css">
 </head>
 
-<body>
+<body class="auth-page auth-login-page">
 
-<header>
-    <h1>Slikskoven</h1>
+<a class="skip-link" href="#main-content">
+    Gå til loginformularen
+</a>
 
-    <nav>
+<header class="site-header">
+    <a
+            class="brand"
+            href="/forside.html"
+            aria-label="Gå til Slikskovens forside"
+    >
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <span class="brand-text">
+            <strong>Slikskoven</strong>
+            <small>Slik, is & hygge</small>
+        </span>
+    </a>
+
+    <nav aria-label="Primær navigation">
         <a href="/forside.html">Forside</a>
         <a href="/news.html">Nyheder</a>
         <a href="/products.html">Produkter</a>
@@ -25,72 +43,201 @@
     </nav>
 </header>
 
-<main>
-    <section>
-        <h2>Log ind</h2>
+<main id="main-content" class="auth-main">
 
-        <p>
-            Log ind med din e-mail og dit kodeord.
-        </p>
+    <section class="auth-shell auth-login-shell">
 
-        <div
-                id="login-message"
-                role="alert"
-                style="display: none;"
-        ></div>
+        <aside class="auth-visual-panel">
+            <div class="auth-visual-content">
+                <p class="auth-visual-kicker">
+                    Din Slikskoven-konto
+                </p>
 
-        <form
-                id="login-form"
-                action="/login"
-                method="post"
-        >
-            <label for="username">
-                E-mail
-            </label>
+                <h1>
+                    Velkommen
+                    <span>tilbage</span>
+                </h1>
 
-            <input
-                    type="email"
-                    id="username"
-                    name="username"
-                    placeholder="E-mail"
-                    autocomplete="email"
-                    required
+                <p class="auth-visual-description">
+                    Log ind for at få adgang til din konto og de funktioner,
+                    der hører til din bruger.
+                </p>
+
+                <div class="auth-benefit-list">
+                    <div>
+                        <span aria-hidden="true">01</span>
+
+                        <p>
+                            <strong>Én samlet konto</strong>
+                            Brug den samme konto på tværs af Slikskoven.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span aria-hidden="true">02</span>
+
+                        <p>
+                            <strong>Sikker adgang</strong>
+                            Login og formularer er beskyttet med CSRF.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span aria-hidden="true">03</span>
+
+                        <p>
+                            <strong>Rigtig adgang</strong>
+                            Administratorer sendes direkte til dashboardet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-candy-scene" aria-hidden="true">
+                <div class="auth-candy-ring"></div>
+                <div class="auth-candy-piece auth-piece-one"></div>
+                <div class="auth-candy-piece auth-piece-two"></div>
+                <div class="auth-candy-piece auth-piece-three"></div>
+
+                <div class="auth-account-card">
+                    <span class="auth-account-mark">S</span>
+                    <strong>Min konto</strong>
+                    <small>Slikskoven</small>
+                </div>
+            </div>
+        </aside>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-heading">
+                <p class="auth-form-kicker">
+                    Velkommen tilbage
+                </p>
+
+                <h2>Log ind</h2>
+
+                <p>
+                    Indtast din e-mail og dit kodeord for at fortsætte.
+                </p>
+            </div>
+
+            <div
+                    id="login-message"
+                    class="auth-message"
+                    role="alert"
+                    aria-live="polite"
+                    style="display: none;"
+            ></div>
+
+            <form
+                    id="login-form"
+                    class="auth-form"
+                    action="/login"
+                    method="post"
             >
+                <div class="auth-field">
+                    <label for="username">
+                        E-mail
+                    </label>
 
-            <label for="password">
-                Kodeord
-            </label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="18" height="14" rx="3"></rect>
+                                <path d="m4 7 8 6 8-6"></path>
+                            </svg>
+                        </span>
 
-            <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Kodeord"
-                    autocomplete="current-password"
-                    required
-            >
+                        <input
+                                type="email"
+                                id="username"
+                                name="username"
+                                placeholder="navn@eksempel.dk"
+                                autocomplete="email"
+                                required
+                        >
+                    </div>
+                </div>
 
-            <button
-                    type="submit"
-                    id="login-button"
-                    disabled
-            >
-                Log ind
-            </button>
-        </form>
+                <div class="auth-field">
+                    <div class="auth-label-row">
+                        <label for="password">
+                            Kodeord
+                        </label>
 
-        <p>
-            Har du ikke en konto?
+                        <span>Minimum 8 tegn</span>
+                    </div>
 
-            <a href="/register.html">
-                Opret bruger
-            </a>
-        </p>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="5" y="10" width="14" height="11" rx="3"></rect>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                <path d="M12 14v3"></path>
+                            </svg>
+                        </span>
+
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Dit kodeord"
+                                autocomplete="current-password"
+                                required
+                        >
+                    </div>
+                </div>
+
+                <button
+                        type="submit"
+                        id="login-button"
+                        class="auth-submit-button"
+                        disabled
+                >
+                    <span>Log ind</span>
+                    <span class="auth-submit-arrow" aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <div class="auth-switch">
+                <p>Har du ikke en konto?</p>
+
+                <a href="/register.html">
+                    Opret bruger
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            <p class="auth-security-note">
+                <span aria-hidden="true">i</span>
+                Dine loginoplysninger sendes sikkert til Slikskoven.
+            </p>
+        </div>
+
     </section>
+
 </main>
+
+<footer class="site-footer auth-footer">
+    <div class="footer-brand">
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <div>
+            <strong>Slikskoven</strong>
+            <p>Et lidt sødere sted i lokalområdet.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="/forside.html">Forside</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Bestil</a>
+        <a href="/news.html">Nyheder</a>
+    </div>
+
+    <p class="footer-copy">© Slikskoven</p>
+</footer>
 
 <script src="/js/shared/api.js"></script>
 <script src="/js/auth/login.js"></script>
-
 </body>
 </html>
