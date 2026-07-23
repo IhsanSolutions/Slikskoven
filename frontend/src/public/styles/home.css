@@ -890,3 +890,46 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ==================================================
+   FORSIDE: BILLEDER I EXPERIENCE-KORT
+   Erstat den gamle .card-icon-regel med disse regler.
+   ================================================== */
+
+.card-icon.card-icon-image {
+    width: 100%;
+    height: 168px;
+    margin: 0 0 27px;
+    overflow: hidden;
+    display: block;
+    border: 0;
+    border-radius: 24px;
+    background: white;
+    box-shadow:
+            0 12px 28px rgba(18, 63, 53, 0.10);
+    transform: none;
+}
+
+.card-icon.card-icon-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition:
+            transform 240ms ease,
+            filter 240ms ease;
+}
+
+.experience-card:hover
+.card-icon.card-icon-image img {
+    transform: scale(1.035);
+    filter: saturate(1.04);
+}
+
+@media (max-width: 760px) {
+    .card-icon.card-icon-image {
+        height: 150px;
+        margin-bottom: 23px;
+        border-radius: 20px;
+    }
+}

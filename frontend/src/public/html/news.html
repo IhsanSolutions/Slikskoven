@@ -3,36 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slikskoven - Nyheder</title>
+
+    <title>Nyheder og arrangementer | Slikskoven</title>
+
+    <meta
+            name="description"
+            content="Se de seneste nyheder, tilbud og arrangementer fra Slikskoven."
+    >
+
     <link rel="stylesheet" href="/styles/shared.css">
     <link rel="stylesheet" href="/styles/news.css">
 </head>
-<body>
 
-<header>
-    <h1 style="cursor: pointer;" onclick="window.location.href='forside.html'"> Slikskoven</h1>
-    <nav>
-        <a href="forside.html">Forside</a>
-        <a href="news.html">Nyheder</a>
-        <a href="products.html">Produkter</a>
-        <a href="order.html">Min slikpose</a>
+<body class="candy-page news-page">
+
+<a class="skip-link" href="#main-content">Gå til nyhederne</a>
+
+<div class="announcement-bar">
+    <span class="announcement-dot" aria-hidden="true"></span>
+
+    <p>
+        Følg med i nyheder, tilbud og arrangementer fra Slikskoven
+    </p>
+
+    <span class="announcement-dot" aria-hidden="true"></span>
+</div>
+
+<header class="site-header">
+    <a
+            class="brand"
+            href="/forside.html"
+            aria-label="Gå til Slikskovens forside"
+    >
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <span class="brand-text">
+            <strong>Slikskoven</strong>
+            <small>Slik, is & hygge</small>
+        </span>
+    </a>
+
+    <nav aria-label="Primær navigation">
+        <a href="/forside.html">Forside</a>
+        <a class="active" href="/news.html">Nyheder</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Min slikpose</a>
     </nav>
 </header>
 
-<main>
-    <h2>Nyheder & Arrangementer</h2>
+<main id="main-content" class="news-main">
 
-    <div class="admin-only">
-        <nav>
-            <a href="/admin/adminNews.html"><button type="button">Administrer nyheder</button></a>
-        </nav>
-    </div>
+    <section class="news-hero">
+        <div class="news-hero-copy">
+            <p class="news-kicker">Nyt fra butikken</p>
 
-    <input type="text" id="search" placeholder="Søg efter nyheder...">
-    <div id="news-container">
-        <p>Henter nyheder...</p>
-    </div>
+            <h1>Nyheder med lidt mere<span>sødme</span></h1>
+
+            <p class="news-hero-description">
+                Her finder du butikkens seneste nyheder, kommende
+                arrangementer, særlige åbningstider og nye produkter.
+            </p>
+
+            <div class="news-hero-actions">
+                <a class="candy-button candy-button-primary" href="#news-overview">
+                    Se alle nyheder
+                    <span aria-hidden="true">↓</span>
+                </a>
+
+                <a class="candy-button candy-button-secondary" href="/products.html">
+                    Udforsk produkterne
+                </a>
+            </div>
+
+            <div class="news-hero-highlights">
+                <div>
+                    <strong>Aktuelt</strong>
+                    <span>Seneste nyt fra butikken</span>
+                </div>
+
+                <div>
+                    <strong>Lokalt</strong>
+                    <span>Arrangementer i nærområdet</span>
+                </div>
+
+                <div>
+                    <strong>Nyt udvalg</strong>
+                    <span>Produkter og sæsonvarer</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-hero-visual" aria-hidden="true">
+            <div class="news-visual-ring news-visual-ring-large"></div>
+            <div class="news-visual-ring news-visual-ring-small"></div>
+
+            <div class="news-board">
+                <span class="news-board-label">Slikskoven</span>
+
+                <strong>Nyt!</strong>
+
+                <p>
+                    Følg med i hvad der sker i butikken.
+                </p>
+
+                <div class="news-board-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <span class="news-shape news-shape-pink"></span>
+            <span class="news-shape news-shape-yellow"></span>
+            <span class="news-shape news-shape-purple"></span>
+            <span class="news-shape news-shape-mint"></span>
+        </div>
+    </section>
+
+    <section
+            id="news-overview"
+            class="news-overview"
+            aria-labelledby="news-title"
+    >
+        <header class="news-section-heading">
+            <div>
+                <p class="section-kicker">
+                    Nyheder og arrangementer
+                </p>
+
+                <h2 id="news-title">
+                    Hvad sker der i Slikskoven?
+                </h2>
+
+                <p>
+                    Søg blandt butikkens opslag, eller gå på opdagelse
+                    i de nyeste historier.
+                </p>
+            </div>
+
+            <div class="admin-only news-admin-shortcut">
+                <a href="/admin/adminNews.html">
+                    Administrer nyheder
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="news-search-panel">
+            <div class="news-search-field">
+                <span class="news-search-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m16 16 5 5"></path>
+                    </svg>
+                </span>
+
+                <label class="visually-hidden" for="search">
+                    Søg blandt nyheder
+                </label>
+
+                <input
+                        type="search"
+                        id="search"
+                        placeholder="Søg efter en nyhed eller et arrangement"
+                        autocomplete="off"
+                >
+
+                <button
+                        type="button"
+                        id="news-search-clear"
+                        class="news-search-clear"
+                        aria-label="Ryd søgningen"
+                        hidden
+                >
+                    &times;
+                </button>
+            </div>
+
+            <div class="news-search-status">
+                <span class="news-status-dot" aria-hidden="true"></span>
+
+                <p id="news-result-count" aria-live="polite">
+                    Henter nyheder…
+                </p>
+            </div>
+        </div>
+
+        <div id="news-container" class="news-grid">
+            <div class="news-loading-state">
+                <span class="news-loading-spinner" aria-hidden="true"></span>
+
+                <strong>Henter nyheder</strong>
+
+                <p>
+                    Et øjeblik – vi finder det seneste fra Slikskoven.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="news-bottom-cta">
+        <div>
+            <p class="section-kicker">Få lyst til noget sødt?</p>
+
+            <h2>Se hvad butikken tilbyder</h2>
+
+            <p>
+                Gå videre til produktoversigten, eller sammensæt din
+                egen slikpose til afhentning.
+            </p>
+        </div>
+
+        <div class="news-bottom-actions">
+            <a class="candy-button candy-button-secondary" href="/products.html">Se produkter</a>
+
+            <a class="candy-button candy-button-primary" href="/order.html">
+                Start en bestilling
+                <span aria-hidden="true">→</span>
+            </a>
+        </div>
+    </section>
+
 </main>
+
+<footer class="site-footer">
+    <div class="footer-brand">
+        <span class="brand-icon" aria-hidden="true">S</span>
+
+        <div>
+            <strong>Slikskoven</strong>
+            <p>Et lidt sødere sted i lokalområdet.</p>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="/forside.html">Forside</a>
+        <a href="/products.html">Produkter</a>
+        <a href="/order.html">Bestil</a>
+        <a href="/news.html">Nyheder</a>
+    </div>
+
+    <p class="footer-copy">© Slikskoven</p>
+</footer>
 
 <script src="/js/shared/api.js"></script>
 <script src="/js/pages/news.js"></script>
