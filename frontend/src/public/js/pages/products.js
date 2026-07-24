@@ -56,10 +56,11 @@ function showProducts(products) {
                         src="${escapeHtml(imageUrl)}"
                         alt="${escapeHtml(product.name)}"
                         loading="lazy"
+                        onerror="handleBrokenProductImage(this)"
                     >
                 </div>
             `
-            : "";
+            : createProductImagePlaceholder(product.name);
 
         const gelatineTag = product.gelatineType === "WITHOUT_GELATINE"
             ? `<span class="product-tag">Vegansk</span>`
@@ -158,6 +159,7 @@ function openProductModal(productId) {
                 class="modal-product-image"
                 src="${escapeHtml(imageUrl)}"
                 alt="${escapeHtml(product.name)}"
+                onerror="this.remove"
             >
         `
         : "";
@@ -264,9 +266,7 @@ async function filterGelatineFree() {
     updateActiveButton("gelatine-free");
 
     try {
-        const products = await fetchData(
-            "products/gelatine-free"
-        );
+        const products = await fetchData("products/gelatine-free");
 
         showProducts(products);
 
@@ -287,6 +287,36 @@ function showToast(message) {
     }, 2000);
 }
 
+function createProductImagePlaceholder(productName = "Produkt") {
+    const firstLetter = String(productName || "P")
+        .charAt(0)
+        .toUpperCase();
+
+    return `
+        <div class="product-image-wrapper product-image-placeholder">
+            <span aria-hidden="true">
+                ${escapeHtml(firstLetter)}
+            </span>
+        </div>
+    `;
+}
+
+
+function handleBrokenProductImage(imageElement) {
+    const wrapper = imageElement.closest(".product-image-wrapper");
+
+    if (!wrapper) {
+        imageElement.remove();
+        return;
+    }
+
+    const productCard = imageElement.closest(".product-card");
+    const productName =
+        productCard?.querySelector("h3")?.textContent || "Produkt";
+
+    wrapper.outerHTML = createProductImagePlaceholder(productName);
+}
+
 
 function normalizeImageUrl(imageUrl) {
     const value = String(imageUrl || "").trim();
@@ -296,14 +326,22 @@ function normalizeImageUrl(imageUrl) {
     }
 
     if (
-        value.startsWith("/") ||
-        value.startsWith("http://") ||
-        value.startsWith("https://")
+        value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/assets/")
     ) {
         return value;
     }
 
-    return `/${value}`;
+    if (value.startsWith("assets/")) {
+        return `/${value}`;
+    }
+
+    const isImageFilename = /\.(png|jpe?g|webp|gif)$/i.test(value);
+
+    if (isImageFilename && !value.includes("/")) {
+        return `/assets/products/${value}`;
+    }
+
+    return "";
 }
 
 

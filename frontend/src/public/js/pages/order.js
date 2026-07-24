@@ -234,7 +234,14 @@ function updateOrderSummary() {
 
             const visual = imageUrl
                 ? `
-                    <img src="${escapeHtml(imageUrl)}" alt="" loading="lazy">
+                    <img 
+                        src="${escapeHtml(imageUrl)}" 
+                        alt="" 
+                        loading="lazy"
+                        onerror="handleBrokenOrderImage(this, '${escapeHtml(
+                            productName.charAt(0).toUpperCase()
+                        )}')"
+                        >
                 `
                 : `
                     <span aria-hidden="true">
@@ -698,6 +705,21 @@ function escapeHtml(text) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+}
+
+function handleBrokenOrderImage(imageElement, fallbackLetter) {
+    const visual = imageElement.closest(".order-item-visual");
+
+    if (!visual) {
+        imageElement.remove();
+        return;
+    }
+
+    visual.innerHTML = `
+        <span aria-hidden="true">
+            ${escapeHtml(fallbackLetter || "P")}
+        </span>
+    `;
 }
 
 

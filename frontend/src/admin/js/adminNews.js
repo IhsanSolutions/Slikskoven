@@ -58,10 +58,14 @@ async function loadNews() {
                 <p>${escapeHtml(news.content)}</p>
 
                 ${
-                news.imageUrl
-                    ? `<img src="${escapeHtml(news.imageUrl)}"
-                                alt="${escapeHtml(news.title)}"
-                                style="max-width: 200px;">`
+                imageUrl
+                    ? `<img 
+                            src="${escapeHtml(news.imageUrl)}"
+                            alt="${escapeHtml(news.title)}"
+                            style="max-width: 200px;"
+                            onerror="this.style.display='none'"
+                            >
+                    `
                     : ""
             }
 

@@ -50,12 +50,17 @@ async function loadProducts() {
             const productElement = document.createElement("div");
             productElement.classList.add("admin-product-card");
 
-            const image = product.imageUrl
-                ? `<img
-                        src="${escapeHtml(product.imageUrl)}"
+            const normalizedImageUrl = normalizeImageUrl(product.imageUrl);
+
+            const image = normalizedImageUrl ? `
+                    <img
+                        src="${escapeHtml(normalizedImageUrl)}"
                         alt="${escapeHtml(product.name)}"
                         style="max-width: 160px;"
-                   >`
+                        onerror="this.style.display='none'"
+                    >
+                `
+
                 : "";
 
             productElement.innerHTML = `
