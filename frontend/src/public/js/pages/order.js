@@ -328,12 +328,9 @@ function selectMethod(method, event) {
 function openCommentModal() {
     setOrderMethod("COMMENT");
 
-    const savedComment =
-        localStorage.getItem("orderComment") ||
-        "";
+    const savedComment = localStorage.getItem("orderComment") || "";
 
-    const modalComment =
-        document.getElementById("modal-comment");
+    const modalComment = document.getElementById("modal-comment");
 
     if (modalComment) {
         modalComment.value = savedComment;
@@ -349,14 +346,11 @@ function closeCommentModal() {
 
 
 function saveComment() {
-    const modalComment =
-        document.getElementById("modal-comment");
+    const modalComment = document.getElementById("modal-comment");
 
-    const commentInput =
-        document.getElementById("comment-input");
+    const commentInput = document.getElementById("comment-input");
 
-    const value =
-        modalComment ? modalComment.value.trim() : "";
+    const value = modalComment ? modalComment.value.trim() : "";
 
     localStorage.setItem("orderComment", value);
 
@@ -446,8 +440,7 @@ function closeSelectModal() {
 
 
 function addFromModal(productId) {
-    const input =
-        document.getElementById(`modal-gram-${productId}`);
+    const input = document.getElementById(`modal-gram-${productId}`);
 
     if (!input) {
         return;
@@ -469,9 +462,7 @@ function addFromModal(productId) {
         return;
     }
 
-    let bag =
-        JSON.parse(localStorage.getItem("slikpose")) ||
-        [];
+    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
 
     const existing = bag.find(
         item => String(item.productId) === String(productId)
@@ -503,11 +494,9 @@ function addFromModal(productId) {
 // ==================================================
 
 window.onclick = function(event) {
-    const selectModal =
-        document.getElementById("select-modal");
+    const selectModal = document.getElementById("select-modal");
 
-    const commentModal =
-        document.getElementById("comment-modal");
+    const commentModal = document.getElementById("comment-modal");
 
     if (event.target === selectModal) {
         selectModal.style.display = "none";
@@ -559,8 +548,7 @@ async function submitOrder() {
 
         orderMethod: selectedMethod,
 
-        comment:
-            selectedMethod === "COMMENT" ? comment : null,
+        comment: selectedMethod === "COMMENT" ? comment : null,
 
         orderLines:
             selectedMethod === "MANUAL"
@@ -652,8 +640,7 @@ function clearOrderState() {
 // ==================================================
 
 function showError(message) {
-    const errorDiv =
-        document.getElementById("error-message");
+    const errorDiv = document.getElementById("error-message");
 
     errorDiv.textContent = message;
     errorDiv.style.display = "block";
