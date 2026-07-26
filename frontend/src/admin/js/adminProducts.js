@@ -399,13 +399,13 @@ async function createApiError(response, fallbackMessage) {
 function handleAuthorizationError(error) {
     if (error.status === 401) {
         alert("Din session er udløbet. Log ind igen.");
-        window.location.replace("/login.html");
+        window.location.replace("/log-ind");
         return true;
     }
 
     if (error.status === 403) {
         alert("Du har ikke administratoradgang til denne handling.");
-        window.location.replace("/forside.html");
+        window.location.replace("/");
         return true;
     }
 
@@ -482,15 +482,21 @@ function normalizeImageUrl(imageUrl) {
         return "";
     }
 
-    if (
-        value.startsWith("/") ||
-        value.startsWith("http://") ||
-        value.startsWith("https://")
-    ) {
+    if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/assets/")) {
         return value;
     }
 
-    return `/${value}`;
+    if (value.startsWith("assets/")) {
+        return `/${value}`;
+    }
+
+    const isImageFilename = /\.(png|jpe?g|webp|gif)$/i.test(value);
+
+    if (isImageFilename && !value.includes("/")) {
+        return `/assets/products/${value}`;
+    }
+
+    return "";
 }
 
 function formatCategory(category) {
