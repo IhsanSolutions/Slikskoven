@@ -148,7 +148,10 @@
         </header>
 
         <ol class="mix-progress" aria-label="Bestillingens trin">
-            <li class="mix-progress-active">
+            <li
+                    id="progress-step-method"
+                    class="mix-progress-complete"
+            >
                 <span>1</span>
 
                 <div>
@@ -157,20 +160,29 @@
                 </div>
             </li>
 
-            <li>
+            <li
+                    id="progress-step-content"
+                    class="mix-progress-active"
+                    aria-current="step"
+            >
                 <span>2</span>
 
                 <div>
-                    <strong>Tilpas posen</strong>
-                    <small>Produkter eller beskrivelse</small>
+                    <strong id="progress-content-title">
+                        Vælg produkter
+                    </strong>
+
+                    <small id="progress-content-description">
+                        Sammensæt posens indhold
+                    </small>
                 </div>
             </li>
 
-            <li>
+            <li id="progress-step-contact">
                 <span>3</span>
 
                 <div>
-                    <strong>Send bestillingen</strong>
+                    <strong>Kontakt og send</strong>
                     <small>Oplysninger og kontrol</small>
                 </div>
             </li>
@@ -191,7 +203,8 @@
                 <button
                         type="button"
                         class="method-btn mix-method-card mix-method-manual active"
-                        onclick="selectMethod('MANUAL', event); openSelectModal()"
+                        aria-pressed="true"
+                        onclick="selectMethod('MANUAL', event)"
                         aria-label="Sammensæt selv din slikpose"
                 >
                     <span class="mix-method-icon" aria-hidden="true">
@@ -225,7 +238,8 @@
                 <button
                         type="button"
                         class="method-btn mix-method-card mix-method-comment"
-                        onclick="selectMethod('COMMENT', event); openCommentModal()"
+                        aria-pressed="false"
+                        onclick="selectMethod('COMMENT', event)"
                         aria-label="Beskriv dine ønsker, så Slikskoven sammensætter posen"
                 >
                     <span class="mix-method-icon" aria-hidden="true">
@@ -262,7 +276,7 @@
 
                 <section id="comment-section" class="mix-section-card mix-comment-section" style="display: none;">
                     <div class="mix-card-heading">
-                        <span class="mix-section-number">02</span>
+                        <span id="comment-section-number" class="mix-section-number">02</span>
 
                         <div>
                             <p>Din ønskede blanding</p>
@@ -288,10 +302,10 @@
 
                 <section id="contact-section" class="mix-section-card mix-contact-section">
                     <div class="mix-card-heading">
-                        <span class="mix-section-number">02</span>
+                        <span id="contact-section-number" class="mix-section-number">03</span>
 
                         <div>
-                            <p>Kontaktoplysninger</p>
+                            <p id="contact-section-eyebrow">Trin 3 · Kontaktoplysninger</p>
                             <h3>Hvem er bestillingen til?</h3>
                         </div>
                     </div>

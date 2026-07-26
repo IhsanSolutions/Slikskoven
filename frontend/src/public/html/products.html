@@ -66,9 +66,7 @@
 
     <section class="catalog-hero">
         <div class="catalog-hero-copy">
-            <p class="catalog-kicker">
-                Gå på opdagelse
-            </p>
+            <p class="catalog-kicker">Gå på opdagelse</p>
 
             <h1>
                 Find din næste
@@ -82,20 +80,12 @@
             </p>
 
             <div class="catalog-hero-actions">
-                <a
-                        class="candy-button candy-button-primary"
-                        href="#product-catalog"
-                >
+                <a class="candy-button candy-button-primary" href="#product-catalog">
                     Se produkterne
                     <span aria-hidden="true">↓</span>
                 </a>
 
-                <a
-                        class="candy-button candy-button-secondary"
-                        href="order.html"
-                >
-                    Gå til min slikpose
-                </a>
+                <a class="candy-button candy-button-secondary" href="order.html">Gå til min slikpose</a>
             </div>
 
             <div class="catalog-highlights">
@@ -133,24 +123,14 @@
         </div>
     </section>
 
-    <section
-            id="product-catalog"
-            class="catalog-section"
-            aria-labelledby="catalog-title"
-    >
+    <section id="product-catalog" class="catalog-section" aria-labelledby="catalog-title">
         <div class="catalog-section-heading">
             <div>
-                <p class="section-kicker">
-                    Hele sortimentet
-                </p>
+                <p class="section-kicker">Hele sortimentet</p>
 
-                <h2 id="catalog-title">
-                    Hvad har du lyst til?
-                </h2>
+                <h2 id="catalog-title">Hvad har du lyst til?</h2>
 
-                <p>
-                    Brug kategorierne til at finde det, du leder efter.
-                </p>
+                <p>Brug kategorierne til at finde det, du leder efter.</p>
             </div>
 
             <a class="catalog-bag-link" href="order.html">
@@ -159,89 +139,70 @@
             </a>
         </div>
 
-        <div
-                id="categories-container"
-                class="categories-container"
-                aria-label="Filtrér produkter"
-        >
-            <button
-                    type="button"
-                    class="category-btn active"
-                    data-category="alle"
-                    onclick="filterCategory('alle')"
-            >
+        <div id="categories-container" class="categories-container" aria-label="Filtrér produkter efter kategori">
+            <button type="button" class="category-btn active"
+                    data-category="alle" aria-pressed="true"
+                    onclick="filterCategory('alle')">
                 <span class="category-label">Alle produkter</span>
             </button>
 
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="CANDY"
-                    onclick="filterCategory('CANDY')"
-            >
+            <button type="button" class="category-btn"
+                    data-category="BLAND_SELV" aria-pressed="false"
+                    onclick="filterCategory('BLAND_SELV')">
+                <span class="category-label">Bland-selv slik</span>
+            </button>
+
+            <button type="button" class="category-btn"
+                    data-category="CANDY" aria-pressed="false"
+                    onclick="filterCategory('CANDY')">
                 <span class="category-label">Slik</span>
             </button>
 
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="ICE_CREAM"
-                    onclick="filterCategory('ICE_CREAM')"
-            >
+            <button type="button" class="category-btn"
+                    data-category="ICE_CREAM" aria-pressed="false"
+                    onclick="filterCategory('ICE_CREAM')">
                 <span class="category-label">Is</span>
             </button>
 
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="COFFEE"
-                    onclick="filterCategory('COFFEE')"
-            >
-                <span class="category-label">Kaffe</span>
-            </button>
-
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="SLUSH_ICE"
-                    onclick="filterCategory('SLUSH_ICE')"
-            >
-                <span class="category-label">Slushice</span>
-            </button>
-
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="SOFT_ICE"
-                    onclick="filterCategory('SOFT_ICE')"
-            >
+            <button type="button" class="category-btn"
+                    data-category="SOFT_ICE" aria-pressed="false"
+                    onclick="filterCategory('SOFT_ICE')">
                 <span class="category-label">Softice</span>
             </button>
 
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="PANCAKE"
-                    onclick="filterCategory('PANCAKE')"
-            >
+            <button type="button" class="category-btn"
+                    data-category="SLUSH_ICE" aria-pressed="false"
+                    onclick="filterCategory('SLUSH_ICE')">
+                <span class="category-label">Slushice</span>
+            </button>
+
+            <button type="button" class="category-btn"
+                    data-category="COFFEE" aria-pressed="false"
+                    onclick="filterCategory('COFFEE')">
+                <span class="category-label">Kaffe</span>
+            </button>
+
+            <button type="button" class="category-btn"
+                    data-category="PANCAKE" aria-pressed="false"
+                    onclick="filterCategory('PANCAKE')">
                 <span class="category-label">Pandekager</span>
             </button>
 
-            <button
-                    type="button"
-                    class="category-btn"
-                    data-category="BEN_AND_JERRYS"
-                    onclick="filterCategory('BEN_AND_JERRYS')"
-            >
-                <span class="category-label">Ben & Jerry's</span>
+            <button type="button" class="category-btn"
+                    data-category="BEN_AND_JERRYS" aria-pressed="false"
+                    onclick="filterCategory('BEN_AND_JERRYS')">
+                <span class="category-label">Ben &amp; Jerry's</span>
             </button>
+        </div>
 
-            <button
-                    type="button"
+        <div class="catalog-special-filter" aria-label="Særlige produktfiltre">
+            <span>Særligt filter</span>
+
+            <button type="button"
                     class="category-btn category-btn-special"
                     data-category="gelatine-free"
-                    onclick="filterGelatineFree()"
-            >
+                    aria-pressed="false"
+                    onclick="filterGelatineFree()">
                 <span class="category-label">Uden gelatine</span>
             </button>
         </div>

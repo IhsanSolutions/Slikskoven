@@ -2968,3 +2968,68 @@
         grid-row: 1 / span 2;
     }
 }
+
+/* ==================================================
+   ORDREFLOW — AKTIVE OG FÆRDIGE TRIN
+   ================================================== */
+
+.mix-progress li {
+    transition:
+            background 180ms ease,
+            opacity 180ms ease,
+            transform 180ms ease;
+}
+
+.mix-progress li:not(.mix-progress-active):not(.mix-progress-complete) {
+    opacity: 0.52;
+}
+
+.mix-progress li.mix-progress-active {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.mix-progress li.mix-progress-complete {
+    opacity: 1;
+    background: rgba(120, 223, 192, 0.16);
+}
+
+.mix-progress li.mix-progress-complete > span {
+    position: relative;
+    border-color: var(--candy-mint);
+    background: var(--candy-mint);
+    color: transparent;
+}
+
+.mix-progress li.mix-progress-complete > span::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--candy-forest-dark);
+}
+
+.mix-progress li.mix-progress-complete strong {
+    color: var(--candy-forest);
+}
+
+.mix-progress li.mix-progress-complete small {
+    color: var(--candy-muted);
+}
+
+.order-page #method-container .mix-method-card[aria-pressed="true"] {
+    border-color: var(--method-accent);
+}
+
+@media (max-width: 760px) {
+    .mix-progress li.mix-progress-complete {
+        display: flex;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mix-progress li {
+        transition: none;
+    }
+}

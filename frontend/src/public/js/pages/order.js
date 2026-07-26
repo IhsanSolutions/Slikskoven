@@ -2,6 +2,7 @@ let selectedMethod = "MANUAL";
 let orderLines = [];
 let allProducts = [];
 let productsLoadPromise = null;
+let orderSubmitted = false;
 
 // ==================================================
 // LOAD PRODUCTS
@@ -219,6 +220,7 @@ function updateOrderSummary() {
 
         totalContainer.textContent = "0.00 kr.";
 
+        updateProgressState();
         return;
     }
 
@@ -239,8 +241,8 @@ function updateOrderSummary() {
                         alt="" 
                         loading="lazy"
                         onerror="handleBrokenOrderImage(this, '${escapeHtml(
-                            productName.charAt(0).toUpperCase()
-                        )}')"
+                    productName.charAt(0).toUpperCase()
+                )}')"
                         >
                 `
                 : `
@@ -281,6 +283,8 @@ function updateOrderSummary() {
         .join("");
 
     totalContainer.textContent = `${formatPrice(total)} kr.`;
+
+    updateProgressState();
 }
 
 
@@ -289,35 +293,209 @@ function updateOrderSummary() {
 // ==================================================
 
 function setOrderMethod(method) {
-    selectedMethod = method;
+    selectedMethod =
+        method === "COMMENT"
+            ? "COMMENT"
+            : "MANUAL";
 
-    const manualSection =
-        document.getElementById("manual-section");
+    orderSubmitted = false;
 
-    const commentSection =
-        document.getElementById("comment-section");
+    const manualSection = document.getElementById("manual-section");
+    const commentSection = document.getElementById("comment-section");
+    const confirmation = document.getElementById("confirmation");
+    const submitButton = document.getElementById("submit-btn");
 
     if (manualSection) {
-        manualSection.style.display = "block";
+        manualSection.style.display =
+            selectedMethod === "MANUAL"
+                ? "block"
+                : "none";
     }
 
     if (commentSection) {
         commentSection.style.display =
-            method === "COMMENT" ? "block" : "none";
+            selectedMethod === "COMMENT"
+                ? "block"
+                : "none";
+    }
+
+    if (confirmation) {
+        confirmation.style.display = "none";
+    }
+
+    if (submitButton) {
+        submitButton.style.display = "";
+    }
+
+    document
+        .querySelectorAll(".method-btn")
+        .forEach(button => {
+            const buttonMethod =
+                button.classList.contains(
+                    "mix-method-comment"
+                )
+                    ? "COMMENT"
+                    : "MANUAL";
+
+            const isSelected = buttonMethod === selectedMethod;
+
+            button.classList.toggle("active", isSelected);
+
+            button.setAttribute("aria-pressed", String(isSelected));
+        });
+
+    updateOrderFlow();
+}
+
+
+function updateOrderFlow() {
+    const contentTitle = document.getElementById("progress-content-title");
+
+    const contentDescription = document.getElementById("progress-content-description");
+
+    if (contentTitle) {
+        contentTitle.textContent =
+            selectedMethod === "COMMENT"
+                ? "Beskriv posen"
+                : "Vælg produkter";
+    }
+
+    if (contentDescription) {
+        contentDescription.textContent =
+            selectedMethod === "COMMENT"
+                ? "Skriv vægt, smage og ønsker"
+                : "Sammensæt posens indhold";
+    }
+
+    updateProgressState();
+}
+
+
+function updateProgressState() {
+    const contentComplete =
+        selectedMethod === "COMMENT"
+            ? Boolean(getOrderComment())
+            : orderLines.length > 0;
+
+    setProgressStepState(
+        "progress-step-method",
+        false,
+        true
+    );
+
+    setProgressStepState(
+        "progress-step-content",
+        !contentComplete,
+        contentComplete
+    );
+
+    setProgressStepState(
+        "progress-step-contact",
+        contentComplete && !orderSubmitted,
+        orderSubmitted
+    );
+}
+
+
+function setProgressStepState(
+    elementId,
+    isActive,
+    isComplete
+) {
+    const step = document.getElementById(elementId);
+
+    if (!step) {
+        return;
+    }
+
+    step.classList.toggle(
+        "mix-progress-active",
+        isActive
+    );
+
+    step.classList.toggle(
+        "mix-progress-complete",
+        isComplete
+    );
+
+    if (isActive) {
+        step.setAttribute(
+            "aria-current",
+            "step"
+        );
+    } else {
+        step.removeAttribute("aria-current");
     }
 }
 
 
+function initializeOrderFlowListeners() {
+    const commentInput = document.getElementById("comment-input");
+    const modalComment = document.getElementById("modal-comment");
+    const customerName = document.getElementById("customer-name");
+    const customerPhone = document.getElementById("customer-phone");
+
+    if (commentInput) {
+        commentInput.addEventListener(
+            "input",
+            () => {
+                localStorage.setItem(
+                    "orderComment",
+                    commentInput.value
+                );
+
+                if (modalComment) {
+                    modalComment.value =
+                        commentInput.value;
+                }
+
+                updateProgressState();
+            }
+        );
+    }
+
+    if (modalComment) {
+        modalComment.addEventListener(
+            "input",
+            updateProgressState
+        );
+    }
+
+    [customerName, customerPhone]
+        .filter(Boolean)
+        .forEach(input => {
+            input.addEventListener(
+                "input",
+                updateProgressState
+            );
+        });
+}
+
+
 function selectMethod(method, event) {
+    event?.preventDefault();
+
     setOrderMethod(method);
 
-    document.querySelectorAll(".method-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
+    if (selectedMethod === "COMMENT") {
+        const commentSection = document.getElementById("comment-section");
 
-    if (event) {
-        event.target.classList.add("active");
+        const commentInput = document.getElementById("comment-input");
+
+        commentSection?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        window.setTimeout(
+            () => commentInput?.focus(),
+            350
+        );
+
+        return;
     }
+
+    openSelectModal();
 }
 
 
@@ -328,15 +506,29 @@ function selectMethod(method, event) {
 function openCommentModal() {
     setOrderMethod("COMMENT");
 
-    const savedComment = localStorage.getItem("orderComment") || "";
+    const commentInput = document.getElementById("comment-input");
 
     const modalComment = document.getElementById("modal-comment");
 
+    const currentComment =
+        commentInput?.value ||
+        localStorage.getItem("orderComment") ||
+        "";
+
     if (modalComment) {
-        modalComment.value = savedComment;
+        modalComment.value = currentComment;
     }
 
-    document.getElementById("comment-modal").style.display = "block";
+    const modal = document.getElementById("comment-modal");
+
+    if (modal) {
+        modal.style.display = "block";
+
+        window.setTimeout(
+            () => modalComment?.focus(),
+            100
+        );
+    }
 }
 
 
@@ -350,7 +542,10 @@ function saveComment() {
 
     const commentInput = document.getElementById("comment-input");
 
-    const value = modalComment ? modalComment.value.trim() : "";
+    const value =
+        modalComment
+            ? modalComment.value.trim()
+            : "";
 
     localStorage.setItem("orderComment", value);
 
@@ -358,6 +553,7 @@ function saveComment() {
         commentInput.value = value;
     }
 
+    updateProgressState();
     closeCommentModal();
 }
 
@@ -578,8 +774,8 @@ async function submitOrder() {
             throw new Error(message);
         }
 
-        showConfirmation();
         clearOrderState();
+        showConfirmation();
 
     } catch (error) {
         showError(error.message || "Noget gik galt. Prøv igen.");
@@ -608,8 +804,37 @@ function getOrderComment() {
 
 
 function showConfirmation() {
-    document.getElementById("confirmation").style.display = "block";
-    document.getElementById("submit-btn").style.display = "none";
+    orderSubmitted = true;
+
+    const confirmation = document.getElementById("confirmation");
+
+    const submitButton = document.getElementById("submit-btn");
+
+    if (confirmation) {
+        confirmation.style.display = "flex";
+    }
+
+    if (submitButton) {
+        submitButton.style.display = "none";
+    }
+
+    setProgressStepState(
+        "progress-step-method",
+        false,
+        true
+    );
+
+    setProgressStepState(
+        "progress-step-content",
+        false,
+        true
+    );
+
+    setProgressStepState(
+        "progress-step-contact",
+        false,
+        true
+    );
 }
 
 
@@ -654,19 +879,28 @@ function showError(message) {
 function normalizeImageUrl(imageUrl) {
     const value = String(imageUrl || "").trim();
 
-    if (!value) {
-        return "";
-    }
+    if (!value) return "";
 
     if (
-        value.startsWith("/") ||
         value.startsWith("http://") ||
-        value.startsWith("https://")
+        value.startsWith("https://") ||
+        value.startsWith("/assets/")
     ) {
         return value;
     }
 
-    return `/${value}`;
+    if (value.startsWith("assets/")) {
+        return `/${value}`;
+    }
+
+    if (
+        /\.(png|jpe?g|webp|gif)$/i.test(value) &&
+        !value.includes("/")
+    ) {
+        return `/assets/products/${value}`;
+    }
+
+    return "";
 }
 
 function formatPrice(price) {
@@ -714,6 +948,28 @@ function handleBrokenOrderImage(imageElement, fallbackLetter) {
 // INIT
 // ==================================================
 
-loadProducts();
-loadBagFromStorage();
-setOrderMethod("MANUAL");
+document.addEventListener("DOMContentLoaded", initializeOrderPage);
+
+
+async function initializeOrderPage() {
+    await loadProducts();
+
+    loadBagFromStorage();
+    initializeOrderFlowListeners();
+
+    const savedComment = localStorage.getItem("orderComment") || "";
+
+    const commentInput = document.getElementById("comment-input");
+
+    const modalComment = document.getElementById("modal-comment");
+
+    if (commentInput) {
+        commentInput.value = savedComment;
+    }
+
+    if (modalComment) {
+        modalComment.value = savedComment;
+    }
+
+    setOrderMethod("MANUAL");
+}

@@ -1,12 +1,43 @@
 let allProducts = [];
 
+const PRODUCT_CATEGORY_KEYS = new Set([
+    "BLAND_SELV",
+    "CANDY",
+    "ICE_CREAM",
+    "SOFT_ICE",
+    "SLUSH_ICE",
+    "COFFEE",
+    "PANCAKE",
+    "BEN_AND_JERRYS"
+]);
+
+
+async function initializeProductsPage() {
+    await loadProducts();
+
+    window.addEventListener(
+        "popstate",
+        applyCatalogStateFromUrl
+    );
+}
+
 
 async function loadProducts() {
     const container = document.getElementById("product-container");
 
+    if (!container) {
+        console.error("Containeren #product-container blev ikke fundet.");
+        return;
+    }
+
     try {
-        allProducts = await fetchData("products");
-        showProducts(allProducts);
+        const products = await fetchData("products");
+
+        allProducts = Array.isArray(products)
+            ? products
+            : [];
+
+        applyCatalogStateFromUrl();
 
     } catch (error) {
         container.innerHTML = `
@@ -17,6 +48,47 @@ async function loadProducts() {
 
         console.error(error);
     }
+}
+
+
+function applyCatalogStateFromUrl() {
+    const parameters =
+        new URLSearchParams(window.location.search);
+
+    const category =
+        parameters
+            .get("category")
+            ?.trim()
+            .toUpperCase();
+
+    const filter =
+        parameters
+            .get("filter")
+            ?.trim()
+            .toLowerCase();
+
+    if (filter === "gelatine-free") {
+        filterGelatineFree({
+            updateUrl: false
+        });
+
+        return;
+    }
+
+    if (
+        category &&
+        PRODUCT_CATEGORY_KEYS.has(category)
+    ) {
+        filterCategory(category, {
+            updateUrl: false
+        });
+
+        return;
+    }
+
+    filterCategory("alle", {
+        updateUrl: false
+    });
 }
 
 
@@ -139,9 +211,7 @@ function addToBag(event, productId) {
 
 
 function openProductModal(productId) {
-    const product = allProducts.find(
-        p => String(p.productId) === String(productId)
-    );
+    const product = allProducts.find(p => String(p.productId) === String(productId));
 
     if (!product) {
         return;
@@ -159,7 +229,7 @@ function openProductModal(productId) {
                 class="modal-product-image"
                 src="${escapeHtml(imageUrl)}"
                 alt="${escapeHtml(product.name)}"
-                onerror="this.remove"
+                onerror="this.remove()"
             >
         `
         : "";
@@ -227,54 +297,123 @@ window.onclick = function(event) {
 
 
 function updateActiveButton(category) {
-    document.querySelectorAll(".category-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(button => {
+            const isActive =
+                button.dataset.category === category;
 
-    const activeBtn = document.querySelector(
-        `[data-category="${category}"]`
-    );
+            button.classList.toggle(
+                "active",
+                isActive
+            );
 
-    if (activeBtn) {
-        activeBtn.classList.add("active");
+            button.setAttribute(
+                "aria-pressed",
+                String(isActive)
+            );
+        });
+}
+
+
+function filterCategory(category, options = {}) {
+    const {
+        updateUrl = true
+    } = options;
+
+    const selectedCategory =
+        category === "alle" ||
+        PRODUCT_CATEGORY_KEYS.has(category)
+            ? category
+            : "alle";
+
+    updateActiveButton(selectedCategory);
+
+    const visibleProducts =
+        selectedCategory === "alle"
+            ? allProducts
+            : allProducts.filter(
+                product =>
+                    product.category === selectedCategory
+            );
+
+    showProducts(visibleProducts);
+
+    if (updateUrl) {
+        updateCatalogUrl({
+            category:
+                selectedCategory === "alle"
+                    ? ""
+                    : selectedCategory
+        });
     }
 }
 
 
-async function filterCategory(category) {
-    updateActiveButton(category);
+function filterGelatineFree(options = {}) {
+    const {
+        updateUrl = true
+    } = options;
 
-    if (category === "alle") {
-        showProducts(allProducts);
-        return;
-    }
-
-    try {
-        const products = await fetchData(
-            `products/category/${category}`
-        );
-
-        showProducts(products);
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-
-async function filterGelatineFree() {
     updateActiveButton("gelatine-free");
 
-    try {
-        const products = await fetchData("products/gelatine-free");
+    const visibleProducts =
+        allProducts.filter(
+            product =>
+                product.gelatineType ===
+                "WITHOUT_GELATINE"
+        );
 
-        showProducts(products);
+    showProducts(visibleProducts);
 
-    } catch (error) {
-        console.error(error);
+    if (updateUrl) {
+        updateCatalogUrl({
+            filter: "gelatine-free"
+        });
     }
 }
 
+
+function updateCatalogUrl({
+                              category = "",
+                              filter = ""
+                          } = {}) {
+    const url = new URL(window.location.href);
+
+    url.searchParams.delete("category");
+    url.searchParams.delete("filter");
+
+    if (category) {
+        url.searchParams.set(
+            "category",
+            category
+        );
+    }
+
+    if (filter) {
+        url.searchParams.set(
+            "filter",
+            filter
+        );
+    }
+
+    url.hash = "product-catalog";
+
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+
+    const currentUrl =
+        `${window.location.pathname}` +
+        `${window.location.search}` +
+        `${window.location.hash}`;
+
+    if (nextUrl !== currentUrl) {
+        window.history.pushState(
+            {},
+            "",
+            nextUrl
+        );
+    }
+}
 
 function showToast(message) {
     const toast = document.getElementById("toast");
@@ -390,4 +529,4 @@ function formatGelatineType(gelatineType) {
     return gelatineTypes[gelatineType] || gelatineType || "";
 }
 
-loadProducts();
+initializeProductsPage();
