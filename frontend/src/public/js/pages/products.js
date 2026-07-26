@@ -256,7 +256,7 @@ function openProductModal(productId) {
             <div class="modal-info">
                 <div class="info-item">
                     <strong>Pris:</strong>
-                    <span>${formatPrice(product.price)} kr. / 100g</span>
+                    <span>${formatProductPrice(product)}</span>
                 </div>
 
                 <div class="info-item">
@@ -492,6 +492,16 @@ function formatPrice(price) {
     }
 
     return numericPrice.toFixed(2);
+}
+
+function formatProductPrice(product) {
+    const price = formatPrice(product?.price);
+
+    if (product?.category === "BLAND_SELV") {
+        return `${price} kr. / 100 g`;
+    }
+
+    return `${price} kr.`;
 }
 
 

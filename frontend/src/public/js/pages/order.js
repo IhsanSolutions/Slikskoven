@@ -63,7 +63,7 @@ function showProductList(products) {
                 <h4>${escapeHtml(product.name)}</h4>
 
                 <p>
-                    ${formatPrice(product.price)} kr. / 100g
+                    ${formatProductPrice(product)}
                 </p>
 
                 <input
@@ -911,6 +911,16 @@ function formatPrice(price) {
     }
 
     return numericPrice.toFixed(2);
+}
+
+function formatProductPrice(product) {
+    const price = formatPrice(product?.price);
+
+    if (product?.category === "BLAND_SELV") {
+        return `${price} kr. / 100 g`;
+    }
+
+    return `${price} kr.`;
 }
 
 function isValidPhoneNumber(phone) {

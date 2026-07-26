@@ -72,7 +72,7 @@ async function loadProducts() {
 
                 <p>
                     <strong>Pris:</strong>
-                    ${formatPrice(product.price)} kr. / 100g
+                    ${formatProductPrice(product)}
                 </p>
 
                 <p>
@@ -439,6 +439,16 @@ function formatPrice(price) {
     }
 
     return numericPrice.toFixed(2);
+}
+
+function formatProductPrice(product) {
+    const price = formatPrice(product?.price);
+
+    if (product?.category === "BLAND_SELV") {
+        return `${price} kr. / 100 g`;
+    }
+
+    return `${price} kr.`;
 }
 
 
