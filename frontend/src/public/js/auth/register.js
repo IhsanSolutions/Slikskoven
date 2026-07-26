@@ -4,6 +4,12 @@ document.addEventListener("DOMContentLoaded", initializeRegisterPage);
 function initializeRegisterPage() {
     const form = document.getElementById("register-form");
 
+    if (!form) {
+        console.error("Registreringsformularen blev ikke fundet.");
+
+        return;
+    }
+
     form.addEventListener("submit", registerUser);
 }
 
@@ -13,8 +19,14 @@ async function registerUser(event) {
 
     const registerButton = document.getElementById("register-button");
     const messageContainer = document.getElementById("register-message");
-    const password = document.getElementById("password").value;
-    const confirmedPassword = document.getElementById("confirm-password").value;
+    const password = document.getElementById("password")?.value || "";
+    const confirmedPassword = document.getElementById("confirm-password")?.value || "";
+
+    if (!registerButton || !messageContainer) {
+        console.error("Registreringssiden mangler nødvendige HTML-elementer.");
+
+        return;
+    }
 
     hideRegisterMessage(messageContainer);
 
@@ -25,32 +37,37 @@ async function registerUser(event) {
     }
 
     const request = {
-        name: document.getElementById("name").value.trim(),
+        name: document.getElementById("name")?.value.trim() || "",
 
-        email: document.getElementById("email").value.trim(),
+        email: document.getElementById("email")?.value.trim() || "",
 
-        phone: document.getElementById("phone").value.trim(),
+        phone: document.getElementById("phone")?.value.trim() || "",
 
-        password: password
+        password
     };
 
     registerButton.disabled = true;
     registerButton.textContent = "Opretter...";
 
     try {
-        const response = await apiRequest(
-            "/api/auth/register",
-            {
-                method: "POST",
+        const response =
+            await apiRequest(
+                "/api/auth/register",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-                body: JSON.stringify(request)
-            }
-        );
+                        "Accept":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(request)
+                }
+            );
 
         if (!response.ok) {
             await handleRegistrationError(response, messageContainer);
@@ -58,7 +75,7 @@ async function registerUser(event) {
             return;
         }
 
-        window.location.replace("/login.html?registered=true");
+        window.location.replace("/log-ind?registered=true");
 
     } catch (error) {
         console.error(error);
@@ -76,8 +93,7 @@ async function handleRegistrationError(response, messageContainer) {
     try {
         const errorResponse = await response.json();
 
-        if (errorResponse.fieldErrors && Object.keys(errorResponse.fieldErrors).length > 0
-        ) {
+        if (errorResponse.fieldErrors && Object.keys(errorResponse.fieldErrors).length > 0) {
             const messages = Object.values(errorResponse.fieldErrors);
 
             showRegisterMessage(messageContainer, messages.join(" "), true);
@@ -85,9 +101,7 @@ async function handleRegistrationError(response, messageContainer) {
             return;
         }
 
-        showRegisterMessage(
-            messageContainer, errorResponse.message || "Brugeren kunne ikke oprettes.", true
-        );
+        showRegisterMessage(messageContainer, errorResponse.message || "Brugeren kunne ikke oprettes.", true);
 
     } catch (error) {
         console.error("Kunne ikke læse fejlrespons:", error);

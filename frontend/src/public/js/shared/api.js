@@ -14,13 +14,16 @@ async function getCsrfToken() {
         return cachedCsrfToken;
     }
 
-    const response = await fetch(`${API_URL}/auth/csrf`, {
-        method: "GET",
-        credentials: "same-origin",
-        headers: {
-            "Accept": "application/json"
+    const response = await fetch(
+        `${API_URL}/auth/csrf`,
+        {
+            method: "GET",
+            credentials: "same-origin",
+            headers: {
+                "Accept": "application/json"
+            }
         }
-    });
+    );
 
     if (!response.ok) {
         throw new Error(`Kunne ikke hente CSRF-token. HTTP-status: ${response.status}`);
@@ -55,7 +58,9 @@ function requiresCsrfToken(method) {
         "TRACE"
     ];
 
-    return !safeMethods.includes(method.toUpperCase());
+    return !safeMethods.includes(
+        method.toUpperCase()
+    );
 }
 
 
@@ -63,29 +68,37 @@ function requiresCsrfToken(method) {
 // FÆLLES API-KALD
 // ==================================================
 
-async function apiRequest(url, options = {}) {
+async function apiRequest(
+    url,
+    options = {}
+) {
     const method = (options.method || "GET").toUpperCase();
+
     const headers = new Headers(options.headers || {});
 
     if (requiresCsrfToken(method)) {
         const csrfToken = await getCsrfToken();
 
-        headers.set(csrfToken.headerName, csrfToken.token);
+        headers.set(
+            csrfToken.headerName,
+            csrfToken.token
+        );
     }
 
     return fetch(url, {
         ...options,
-        method: method,
-        headers: headers,
+        method,
+        headers,
         credentials: "same-origin"
     });
 }
 
 
 async function fetchData(endpoint) {
-    const url = endpoint.startsWith("/")
-        ? endpoint
-        : `${API_URL}/${endpoint}`;
+    const url =
+        endpoint.startsWith("/")
+            ? endpoint
+            : `${API_URL}/${endpoint}`;
 
     const response = await apiRequest(url);
 
@@ -97,7 +110,10 @@ async function fetchData(endpoint) {
 }
 
 
-async function getErrorMessage(response, fallbackMessage = "Der opstod en fejl.") {
+async function getErrorMessage(
+    response,
+    fallbackMessage = "Der opstod en fejl."
+) {
     try {
         const errorResponse = await response.json();
 
@@ -157,80 +173,110 @@ function showAdminOnlyElements(user) {
     document
         .querySelectorAll(".admin-only")
         .forEach(element => {
-            element.style.display = user && user.admin
-                ? "block"
-                : "none";
+            element.style.display =
+                user && user.admin
+                    ? "block"
+                    : "none";
         });
 }
 
 
 function updateNavigation(user) {
-    const isAdminPage = window.location.pathname.startsWith("/admin/");
+    const pathname = window.location.pathname;
+
+    const isAdminPage =
+        pathname === "/admin" ||
+        pathname.startsWith("/admin/");
 
     if (isAdminPage) {
         return;
     }
 
-    document.querySelectorAll("header nav").forEach(nav => {
-        const existingAuthLinks = nav.querySelector(".auth-nav-links");
+    document
+        .querySelectorAll("header nav")
+        .forEach(nav => {
+            const existingAuthLinks =
+                nav.querySelector(
+                    ".auth-nav-links"
+                );
 
-        if (existingAuthLinks) {
-            existingAuthLinks.remove();
-        }
+            if (existingAuthLinks) {
+                existingAuthLinks.remove();
+            }
 
-        const authLinks = document.createElement("span");
-        authLinks.classList.add("auth-nav-links");
+            const authLinks = document.createElement("span");
 
-        if (!user || !user.loggedIn) {
+            authLinks.classList.add(
+                "auth-nav-links"
+            );
+
+            if (!user || !user.loggedIn) {
+                authLinks.innerHTML = `
+                    <a href="/log-ind">
+                        Log ind
+                    </a>
+                `;
+
+                nav.appendChild(authLinks);
+                return;
+            }
+
+            if (user.admin) {
+                authLinks.innerHTML = `
+                    <a href="/admin">
+                        Admin-dashboard
+                    </a>
+
+                    <button
+                            type="button"
+                            onclick="logout()"
+                    >
+                        Log ud
+                    </button>
+                `;
+
+                nav.appendChild(authLinks);
+                return;
+            }
+
             authLinks.innerHTML = `
-                <a href="/login.html">Log ind</a>
+                <span class="nav-user-name">
+                    ${escapeHtml(
+                user.name ||
+                user.email
+            )}
+                </span>
+
+                <button
+                        type="button"
+                        onclick="logout()"
+                >
+                    Log ud
+                </button>
             `;
 
             nav.appendChild(authLinks);
-            return;
-        }
-
-        if (user.admin) {
-            authLinks.innerHTML = `
-                <a href="/admin/adminDashboard.html">Admin-dashboard</a>
-                <button type="button" onclick="logout()">Log ud</button>
-            `;
-
-            nav.appendChild(authLinks);
-            return;
-        }
-
-        authLinks.innerHTML = `
-            <span class="nav-user-name">${escapeHtml(user.name || user.email)}</span>
-            <button type="button" onclick="logout()">Log ud</button>
-        `;
-
-        nav.appendChild(authLinks);
-    });
+        });
 }
 
 
 async function logout() {
     try {
-        const response = await apiRequest("/logout", {
-            method: "POST"
-        });
+        const response = await apiRequest("/logout", { method: "POST"});
 
         if (!response.ok) {
-            const message = await getErrorMessage(
-                response,
-                "Du kunne ikke logges ud."
-            );
+            const message = await getErrorMessage(response, "Du kunne ikke logges ud.");
 
             throw new Error(message);
         }
 
         clearCsrfToken();
 
-        window.location.replace("/forside.html");
+        window.location.replace("/");
 
     } catch (error) {
         console.error(error);
+
         alert(error.message || "Du kunne ikke logges ud.");
     }
 }

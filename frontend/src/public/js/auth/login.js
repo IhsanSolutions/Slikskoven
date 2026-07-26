@@ -3,8 +3,16 @@ document.addEventListener("DOMContentLoaded", initializeLoginPage);
 
 async function initializeLoginPage() {
     const form = document.getElementById("login-form");
+
     const loginButton = document.getElementById("login-button");
+
     const messageContainer = document.getElementById("login-message");
+
+    if (!form || !loginButton || !messageContainer) {
+        console.error("Login-siden mangler nødvendige HTML-elementer.");
+
+        return;
+    }
 
     showMessageFromUrl(messageContainer);
 
@@ -13,6 +21,7 @@ async function initializeLoginPage() {
 
         if (currentUser.loggedIn) {
             redirectLoggedInUser(currentUser);
+
             return;
         }
 
@@ -25,10 +34,7 @@ async function initializeLoginPage() {
     } catch (error) {
         console.error(error);
 
-        showLoginMessage(messageContainer,
-            "Loginformularen kunne ikke klargøres. Prøv at genindlæse siden.",
-            true
-        );
+        showLoginMessage(messageContainer, "Loginformularen kunne ikke klargøres. Prøv at genindlæse siden.", true);
     }
 }
 
@@ -38,6 +44,7 @@ function addCsrfInputToForm(form, csrfToken) {
 
     if (existingInput) {
         existingInput.value = csrfToken.token;
+
         return;
     }
 
@@ -52,51 +59,50 @@ function addCsrfInputToForm(form, csrfToken) {
 
 
 function showMessageFromUrl(messageContainer) {
-    const parameters =
-        new URLSearchParams(window.location.search);
+    const parameters = new URLSearchParams(window.location.search);
 
-    if (parameters.get("error") === "true") {
+    if (
+        parameters.get("error") === "true"
+    ) {
         showLoginMessage(messageContainer, "Forkert e-mail eller kodeord.", true);
 
         return;
     }
 
-    if (parameters.get("registered") === "true") {
+    if (
+        parameters.get("registered") === "true"
+    ) {
         showLoginMessage(messageContainer, "Din bruger er oprettet. Du kan nu logge ind.", false);
 
         return;
     }
 
-    if (parameters.get("logout") === "true") {
+    if (
+        parameters.get("logout") === "true"
+    ) {
         showLoginMessage(messageContainer, "Du er blevet logget ud.", false);
     }
 }
 
 
-function showLoginMessage(
-    container,
-    message,
-    isError
-) {
+function showLoginMessage(container, message, isError) {
     container.textContent = message;
     container.style.display = "block";
-    container.classList.toggle(
-        "error-message",
-        isError
-    );
-    container.classList.toggle(
-        "success-message",
-        !isError
-    );
+
+    container.classList.toggle("error-message", isError);
+
+    container.classList.toggle("success-message", !isError);
 }
 
 
 function redirectLoggedInUser(user) {
     if (user.admin) {
-        window.location.replace("/admin/adminDashboard.html");
+        window.location.replace(
+            "/admin"
+        );
 
         return;
     }
 
-    window.location.replace("/forside.html");
+    window.location.replace("/");
 }

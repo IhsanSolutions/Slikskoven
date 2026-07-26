@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 /*
                  * CSRF er aktivt.
-                 * Frontenden bliver opdateret i næste del til at sende tokenet.
+                 * Frontenden henter tokenet gennem /api/auth/csrf.
                  */
                 .csrf(Customizer.withDefaults())
 
@@ -37,7 +37,11 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // Offentlig læsning
-                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/news/**").permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/products/**",
+                                "/api/news/**"
+                        ).permitAll()
 
                         // Gæster og brugere kan oprette ordrer
                         .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
@@ -67,31 +71,34 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form
+                        /*
+                         * /login er stadig backendens processing-endpoint.
+                         * Den offentlige login-side ligger på /log-ind.
+                         */
                         .loginProcessingUrl("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
 
                         .successHandler(
                                 (request, response, authentication) -> {
-                                    boolean admin =
-                                            authentication
-                                                    .getAuthorities()
-                                                    .stream()
-                                                    .anyMatch(authority ->
-                                                            authority
+                                    boolean admin = authentication
+                                                        .getAuthorities()
+                                                        .stream()
+                                                        .anyMatch(authority ->
+                                                                authority
                                                                     .getAuthority()
                                                                     .equals("ROLE_ADMIN")
-                                                    );
+                                                        );
 
                                     if (admin) {
-                                        response.sendRedirect("/admin/adminDashboard.html");
+                                        response.sendRedirect("/admin");
                                     } else {
-                                        response.sendRedirect("/forside.html");
+                                        response.sendRedirect("/");
                                     }
                                 }
                         )
 
-                        .failureUrl("/login.html?error=true")
+                        .failureUrl("/log-ind?error=true")
                         .permitAll()
                 )
 
@@ -111,7 +118,8 @@ public class SecurityConfig {
 
                 .sessionManagement(session ->
                         session.sessionFixation(
-                                sessionFixation -> sessionFixation.migrateSession()
+                                sessionFixation ->
+                                        sessionFixation.migrateSession()
                         )
                 )
 
@@ -120,16 +128,26 @@ public class SecurityConfig {
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
                                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
                                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                                    response.getWriter().write("{\"message\":\"Du skal være logget ind.\"}");
+
+                                    response
+                                            .getWriter()
+                                            .write(
+                                                    "{\"message\":\"Du skal være logget ind.\"}"
+                                            );
                                 }
                         )
 
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) -> {
                                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
                                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                                    response.getWriter().write("{\"message\":\"Du har ikke adgang.\"}");
+
+                                    response
+                                            .getWriter()
+                                            .write("{\"message\":\"Du har ikke adgang.\"}");
                                 }
                         )
                 );
