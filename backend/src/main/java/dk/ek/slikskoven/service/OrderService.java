@@ -9,6 +9,7 @@ import dk.ek.slikskoven.repository.CustomerRepo;
 import dk.ek.slikskoven.repository.OrderRepo;
 import dk.ek.slikskoven.repository.ProductRepo;
 import org.springframework.stereotype.Service;
+import dk.ek.slikskoven.model.ProductCategory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -113,9 +114,7 @@ public class OrderService {
                     .findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
-            double linePrice =
-                    (line.getQuantityGrams() / 100.0) *
-                            product.getPrice();
+            double linePrice = calculateLinePrice(line, product);
 
             line.setProduct(product);
             line.setLinePrice(linePrice);
@@ -127,6 +126,16 @@ public class OrderService {
         order.setTotalPrice(total);
     }
 
+    private double calculateLinePrice(OrderLine line, Product product) {
+        int quantity = line.getQuantity();
+
+        if (product.getCategory() == ProductCategory.BLAND_SELV) {
+            return (quantity / 100.0) * product.getPrice();
+        }
+
+        return quantity * product.getPrice();
+    }
+
     private void validateOrderLine(OrderLine line) {
         if (line == null) {
             throw new IllegalArgumentException("Ordrelinje mangler.");
@@ -136,8 +145,8 @@ public class OrderService {
             throw new IllegalArgumentException("Produkt mangler på ordrelinjen.");
         }
 
-        if (line.getQuantityGrams() == null || line.getQuantityGrams() < 1) {
-            throw new IllegalArgumentException("Mængde i gram skal være mindst 1.");
+        if (line.getQuantity() == null || line.getQuantity() < 1) {
+            throw new IllegalArgumentException("Mængden skal være mindst 1.");
         }
     }
 

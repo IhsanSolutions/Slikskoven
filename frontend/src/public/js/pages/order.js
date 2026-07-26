@@ -58,25 +58,35 @@ function showProductList(products) {
     container.innerHTML = "";
 
     products.forEach(product => {
+        const weighted = isWeightedProduct(product);
+
+        const quantityLabel = weighted ? "Antal gram" : "Antal styk";
+
+        const placeholder = weighted ? "Gram" : "Antal";
+
         container.innerHTML += `
             <div class="product-select-card">
-                <h4>${escapeHtml(product.name)}</h4>
+                <h4>
+                    ${escapeHtml(product.name)}
+                </h4>
 
                 <p>
                     ${formatProductPrice(product)}
                 </p>
 
+                <label class="visually-hidden" for="quantity-${product.productId}">
+                    ${quantityLabel} af
+                    ${escapeHtml(product.name)}
+                </label>
+
                 <input
                     type="number"
-                    id="gram-${product.productId}"
-                    placeholder="gram"
+                    id="quantity-${product.productId}"
+                    placeholder="${placeholder}"
                     min="1"
                 >
 
-                <button
-                    type="button"
-                    onclick="addToOrder(${product.productId})"
-                >
+                <button type="button" onclick="addToOrder(${product.productId})">
                     Tilføj
                 </button>
             </div>
@@ -90,21 +100,10 @@ function showProductList(products) {
 // ==================================================
 
 function addToOrder(productId) {
-    const gramInput = document.getElementById(`gram-${productId}`);
-
-    if (!gramInput) {
-        return;
-    }
-
-    const grams = parseInt(gramInput.value, 10);
-
-    if (!grams || grams <= 0) {
-        alert("Indtast et gyldigt antal gram.");
-        return;
-    }
-
     const product = allProducts.find(
-        p => String(p.productId) === String(productId)
+        p =>
+            String(p.productId) ===
+            String(productId)
     );
 
     if (!product) {
@@ -112,36 +111,55 @@ function addToOrder(productId) {
         return;
     }
 
-    addProductLine(product, grams);
+    const quantityInput = document.getElementById(`quantity-${productId}`);
 
-    gramInput.value = "";
+    if (!quantityInput) {
+        return;
+    }
+
+    const quantity = parseInt(quantityInput.value, 10);
+
+    if (!quantity || quantity <= 0) {
+        const message = isWeightedProduct(product) ? "Indtast et gyldigt antal gram." : "Indtast et gyldigt antal.";
+
+        alert(message);
+        return;
+    }
+
+    addProductLine(product, quantity);
+
+    quantityInput.value = "";
+
+    saveOrderLinesToStorage();
     updateOrderSummary();
 }
 
 
-function addProductLine(product, grams) {
-    const linePrice = (grams / 100) * Number(product.price);
-
-    const existing = orderLines.find(
-        line => String(line.product.productId) === String(product.productId)
+function addProductLine(product, quantity) {
+    const existing = orderLines.find(line =>
+            String(line.product.productId) ===
+            String(product.productId)
     );
 
     if (existing) {
-        existing.quantityGrams += grams;
-        existing.linePrice += linePrice;
+        existing.quantity += quantity;
+
+        existing.linePrice = calculateLinePrice(existing.product, existing.quantity);
 
         return;
     }
 
+    const orderProduct = {
+        productId: product.productId,
+        name: product.name,
+        price: Number(product.price),
+        category: product.category,
+        imageUrl: product.imageUrl || ""
+    };
+
     orderLines.push({
-        product: {
-            productId: product.productId,
-            name: product.name,
-            price: product.price,
-            imageUrl: product.imageUrl
-        },
-        quantityGrams: grams,
-        linePrice: linePrice
+        product: orderProduct, quantity,
+        linePrice: calculateLinePrice(orderProduct, quantity)
     });
 }
 
@@ -151,22 +169,48 @@ function addProductLine(product, grams) {
 // ==================================================
 
 function loadBagFromStorage() {
-    const bag =
-        JSON.parse(localStorage.getItem("slikpose")) ||
-        [];
+    const bag = JSON.parse(localStorage.getItem("slikpose")) || [];
 
-    orderLines = bag.map(item => ({
-        product: {
-            productId: item.productId,
-            name: item.name,
-            price: Number(item.price),
-            imageUrl: item.imageUrl || ""
-        },
-        quantityGrams: Number(item.quantityGrams),
-        linePrice: (Number(item.quantityGrams) / 100) * Number(item.price)
+    orderLines = bag
+        .map(item => {
+            const currentProduct = allProducts.find(product =>
+                    String(product.productId) === String(item.productId)
+                );
+
+            const category = item.category || currentProduct?.category || "";
+
+            const product = {
+                productId: item.productId,
+                name: item.name || currentProduct?.name || "Produkt",
+                price: Number(item.price ?? currentProduct?.price ?? 0), category,
+                imageUrl: item.imageUrl || currentProduct?.imageUrl || ""
+            };
+
+            const quantity = getStoredQuantity(item, category);
+
+            return {
+                product,
+                quantity,
+                linePrice: calculateLinePrice(product, quantity)
+            };
+        })
+        .filter(line => line.quantity > 0);
+
+    saveOrderLinesToStorage();
+    updateOrderSummary();
+}
+
+function saveOrderLinesToStorage() {
+    const bag = orderLines.map(line => ({
+        productId: line.product.productId,
+        name: line.product.name,
+        price: line.product.price,
+        category: line.product.category,
+        imageUrl: line.product.imageUrl,
+        quantity: line.quantity
     }));
 
-    updateOrderSummary();
+    localStorage.setItem("slikpose", JSON.stringify(bag));
 }
 
 
@@ -262,7 +306,12 @@ function updateOrderSummary() {
                             ${escapeHtml(productName)}
                         </strong>
 
-                        <span> ${line.quantityGrams} g</span>
+                        <span> 
+                            ${formatProductQuantity(
+                                line.product,
+                                line.quantity
+                            )}
+                        </span>
                     </div>
 
                     <strong class="order-item-price">
@@ -602,7 +651,12 @@ async function openSelectModal() {
     }
 
     container.innerHTML = products
-        .map(product => `
+        .map(product => {
+            const weighted = isWeightedProduct(product);
+            const quantityLabel = weighted ? `Antal gram af ${product.name}` : `Antal styk af ${product.name}`;
+            const placeholder = weighted ? "Gram" : "Antal";
+
+            return `
             <div class="modal-product-card">
                 <div class="modal-product-information">
                     <strong>
@@ -610,22 +664,29 @@ async function openSelectModal() {
                     </strong>
 
                     <p>
-                        ${formatPrice(product.price)}
-                        kr. / 100 g
+                        ${formatProductPrice(product)}
                     </p>
                 </div>
 
                 <div class="add-box">
-                    <label class="visually-hidden" for="modal-gram-${product.productId}">
-                        Antal gram af ${escapeHtml(product.name)}
+                    <label class="visually-hidden" for="modal-quantity-${product.productId}">
+                        ${escapeHtml(quantityLabel)}
                     </label>
 
-                    <input type="number" id="modal-gram-${product.productId}" placeholder="Gram" min="1">
+                    <input
+                        type="number"
+                        id="modal-quantity-${product.productId}"
+                        placeholder="${placeholder}"
+                        min="1"
+                    >
 
-                    <button type="button" onclick="addFromModal(${product.productId})">Tilføj</button>
+                    <button type="button" onclick="addFromModal(${product.productId})">
+                        Tilføj
+                    </button>
                 </div>
             </div>
-        `)
+        `;
+        })
         .join("");
 }
 
@@ -636,44 +697,49 @@ function closeSelectModal() {
 
 
 function addFromModal(productId) {
-    const input = document.getElementById(`modal-gram-${productId}`);
-
-    if (!input) {
-        return;
-    }
-
-    const grams = parseInt(input.value, 10);
-
-    if (!grams || grams <= 0) {
-        alert("Indtast gram først.");
-        return;
-    }
-
-    const product = allProducts.find(
-        p => String(p.productId) === String(productId)
-    );
+    const product = allProducts.find(p => String(p.productId) === String(productId));
 
     if (!product) {
         alert("Produktet blev ikke fundet.");
         return;
     }
 
+    const input = document.getElementById(`modal-quantity-${productId}`);
+
+    if (!input) {
+        return;
+    }
+
+    const quantity = parseInt(input.value, 10);
+
+    if (!quantity || quantity <= 0) {
+        const message = isWeightedProduct(product) ? "Indtast et gyldigt antal gram." : "Indtast et gyldigt antal.";
+
+        alert(message);
+        return;
+    }
+
     let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
 
-    const existing = bag.find(
-        item => String(item.productId) === String(productId)
+    const existing = bag.find(item => String(item.productId) === String(productId)
     );
 
     if (existing) {
-        existing.quantityGrams += grams;
+        existing.quantity = getStoredQuantity(existing, product.category) + quantity;
+        existing.category = product.category;
+        existing.price = product.price;
+        existing.imageUrl = product.imageUrl || "";
+
+        delete existing.quantityGrams;
 
     } else {
         bag.push({
             productId: product.productId,
             name: product.name,
             price: product.price,
+            category: product.category,
             imageUrl: product.imageUrl || "",
-            quantityGrams: grams
+            quantity
         });
     }
 
@@ -752,7 +818,7 @@ async function submitOrder() {
                     product: {
                         productId: line.product.productId
                     },
-                    quantityGrams: line.quantityGrams
+                    quantityGrams: line.quantity
                 }))
                 : null
     };
@@ -921,6 +987,67 @@ function formatProductPrice(product) {
     }
 
     return `${price} kr.`;
+}
+
+function isWeightedProduct(product) {
+    return product?.category === "BLAND_SELV";
+}
+
+
+function calculateLinePrice(
+    product,
+    quantity
+) {
+    const numericPrice =
+        Number(product?.price);
+
+    const numericQuantity =
+        Number(quantity);
+
+    if (
+        !Number.isFinite(numericPrice) ||
+        !Number.isFinite(numericQuantity)
+    ) {
+        return 0;
+    }
+
+    if (isWeightedProduct(product)) {
+        return (
+            numericQuantity / 100
+        ) * numericPrice;
+    }
+
+    return numericQuantity * numericPrice;
+}
+
+
+function formatProductQuantity(product, quantity) {
+    if (isWeightedProduct(product)) {
+        return `${quantity} g`;
+    }
+
+    return `${quantity} stk.`;
+}
+
+
+function getStoredQuantity(item, category) {
+    const currentQuantity = Number(item?.quantity);
+
+    if (Number.isFinite(currentQuantity) && currentQuantity > 0) {
+        return currentQuantity;
+    }
+
+    const legacyQuantity = Number(item?.quantityGrams);
+
+    if (!Number.isFinite(legacyQuantity) || legacyQuantity <= 0) {
+        return category === "BLAND_SELV" ? 100 : 1;
+    }
+
+    if (category === "BLAND_SELV") {
+        return legacyQuantity;
+    }
+
+    return Math.max(1, Math.round(legacyQuantity / 100));
 }
 
 function isValidPhoneNumber(phone) {

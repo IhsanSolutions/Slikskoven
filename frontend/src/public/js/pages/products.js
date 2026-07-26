@@ -180,31 +180,34 @@ function addToBag(event, productId) {
         return;
     }
 
-    let bag = JSON.parse(
-        localStorage.getItem("slikpose")
-    ) || [];
+    const quantityToAdd = isWeightedProduct(product) ? 100 : 1;
 
-    const existing = bag.find(
-        item => String(item.productId) === String(productId)
+    let bag = JSON.parse(localStorage.getItem("slikpose")) || [];
+
+    const existing = bag.find(item =>
+            String(item.productId) ===
+            String(productId)
     );
 
     if (existing) {
-        existing.quantityGrams += 100;
+        existing.quantity = getStoredQuantity(existing, product.category) + quantityToAdd;
+        existing.category = product.category;
+        existing.imageUrl = normalizeImageUrl(product.imageUrl);
+
+        delete existing.quantityGrams;
 
     } else {
         bag.push({
             productId: product.productId,
             name: product.name,
             price: product.price,
+            category: product.category,
             imageUrl: normalizeImageUrl(product.imageUrl),
-            quantityGrams: 100
+            quantity: quantityToAdd
         });
     }
 
-    localStorage.setItem(
-        "slikpose",
-        JSON.stringify(bag)
-    );
+    localStorage.setItem("slikpose", JSON.stringify(bag));
 
     showToast(`${product.name} blev tilføjet til din pose!`);
 }
@@ -502,6 +505,31 @@ function formatProductPrice(product) {
     }
 
     return `${price} kr.`;
+}
+
+function isWeightedProduct(product) {
+    return product?.category === "BLAND_SELV";
+}
+
+
+function getStoredQuantity(item, category) {
+    const currentQuantity = Number(item?.quantity);
+
+    if (Number.isFinite(currentQuantity) && currentQuantity > 0) {
+        return currentQuantity;
+    }
+
+    const legacyQuantity = Number(item?.quantityGrams);
+
+    if (!Number.isFinite(legacyQuantity) || legacyQuantity <= 0) {
+        return category === "BLAND_SELV" ? 100 : 1;
+    }
+
+    if (category === "BLAND_SELV") {
+        return legacyQuantity;
+    }
+
+    return Math.max(1, Math.round(legacyQuantity / 100));
 }
 
 

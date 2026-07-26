@@ -3,6 +3,7 @@ package dk.ek.slikskoven.service;
 import dk.ek.slikskoven.model.*;
 import dk.ek.slikskoven.repository.CustomerRepo;
 import dk.ek.slikskoven.repository.OrderRepo;
+import dk.ek.slikskoven.repository.ProductRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,9 @@ public class OrderServiceTest {
 
     @Mock
     private CustomerRepo customerRepo;
+
+    @Mock
+    private ProductRepo productRepo;
 
     @InjectMocks
     private OrderService orderService;
@@ -87,18 +91,25 @@ public class OrderServiceTest {
         Product product = new Product();
         product.setProductId(1L);
         product.setPrice(10.0);
+        product.setCategory(ProductCategory.BLAND_SELV);
 
         OrderLine orderLine = new OrderLine();
         orderLine.setProduct(product);
-        orderLine.setQuantityGrams(200);
+        orderLine.setQuantity(200);
 
         Order newOrder = new Order();
         newOrder.setCustomer(testCustomer);
         newOrder.setOrderMethod(OrderMethod.MANUAL);
         newOrder.setOrderLines(List.of(orderLine));
 
-        when(customerRepo.save(any(Customer.class))).thenReturn(testCustomer);
-        when(orderRepo.save(any(Order.class))).thenReturn(testOrder);
+        when(customerRepo.save(any(Customer.class)))
+                .thenReturn(testCustomer);
+
+        when(productRepo.findById(1L))
+                .thenReturn(Optional.of(product));
+
+        when(orderRepo.save(any(Order.class)))
+                .thenReturn(testOrder);
 
         Order result = orderService.createOrder(newOrder);
 
@@ -106,8 +117,15 @@ public class OrderServiceTest {
         assertEquals(OrderStatus.MODTAGET, newOrder.getStatus());
         assertNotNull(newOrder.getCreatedAt());
         assertEquals(20.0, orderLine.getLinePrice());
-        verify(customerRepo, times(1)).save(any(Customer.class));
-        verify(orderRepo, times(1)).save(any(Order.class));
+
+        verify(customerRepo, times(1))
+                .save(any(Customer.class));
+
+        verify(productRepo, times(1))
+                .findById(1L);
+
+        verify(orderRepo, times(1))
+                .save(any(Order.class));
     }
 
     @Test
@@ -130,33 +148,46 @@ public class OrderServiceTest {
 
     @Test
     void testCreateOrder_CorrectPriceCalculation() {
-        Product product1 = new Product();
-        product1.setPrice(10.0);
+        Product weighedProduct = new Product();
+        weighedProduct.setProductId(1L);
+        weighedProduct.setPrice(10.0);
+        weighedProduct.setCategory(ProductCategory.BLAND_SELV);
 
-        Product product2 = new Product();
-        product2.setPrice(20.0);
+        Product unitProduct = new Product();
+        unitProduct.setProductId(2L);
+        unitProduct.setPrice(20.0);
+        unitProduct.setCategory(ProductCategory.COFFEE);
 
-        OrderLine line1 = new OrderLine();
-        line1.setProduct(product1);
-        line1.setQuantityGrams(200);
+        OrderLine weighedLine = new OrderLine();
+        weighedLine.setProduct(weighedProduct);
+        weighedLine.setQuantity(200);
 
-        OrderLine line2 = new OrderLine();
-        line2.setProduct(product2);
-        line2.setQuantityGrams(150);
+        OrderLine unitLine = new OrderLine();
+        unitLine.setProduct(unitProduct);
+        unitLine.setQuantity(2);
 
         Order order = new Order();
         order.setCustomer(testCustomer);
         order.setOrderMethod(OrderMethod.MANUAL);
-        order.setOrderLines(List.of(line1, line2));
+        order.setOrderLines(List.of(weighedLine, unitLine));
 
-        when(customerRepo.save(any(Customer.class))).thenReturn(testCustomer);
-        when(orderRepo.save(any(Order.class))).thenReturn(order);
+        when(customerRepo.save(any(Customer.class)))
+                .thenReturn(testCustomer);
+
+        when(productRepo.findById(1L))
+                .thenReturn(Optional.of(weighedProduct));
+
+        when(productRepo.findById(2L))
+                .thenReturn(Optional.of(unitProduct));
+
+        when(orderRepo.save(any(Order.class)))
+                .thenReturn(order);
 
         orderService.createOrder(order);
 
-        assertEquals(20.0, line1.getLinePrice());
-        assertEquals(30.0, line2.getLinePrice());
-        assertEquals(50.0, order.getTotalPrice());
+        assertEquals(20.0, weighedLine.getLinePrice());
+        assertEquals(40.0, unitLine.getLinePrice());
+        assertEquals(60.0, order.getTotalPrice());
     }
 
     @Test
@@ -172,7 +203,7 @@ public class OrderServiceTest {
 
         orderService.createOrder(order);
 
-        assertNull(order.getTotalPrice());
+        assertEquals(0.0, order.getTotalPrice());
     }
 
     @Test

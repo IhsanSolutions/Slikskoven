@@ -270,16 +270,28 @@ function createOrderLinesHtml(order) {
     }
 
     const rows = order.orderLines.map(line => {
-        const productName = line.product?.name || "Ukendt produkt";
+        const product = line.product || {};
+
+        const productName = product.name || "Ukendt produkt";
+
+        const quantity = line.quantity ?? line.quantityGrams ?? 0;
+
+        const quantityText = product.category === "BLAND_SELV" ? `${quantity} g` : `${quantity} stk.`;
 
         return `
             <tr>
                 <td>${escapeHtml(productName)}</td>
-                <td>${line.quantityGrams ?? 0}g</td>
-                <td>${formatPrice(line.linePrice)} kr.</td>
+        
+                <td>
+                    ${escapeHtml(quantityText)}
+                </td>
+        
+                <td>
+                    ${formatPrice(line.linePrice)} kr.
+                </td>
             </tr>
         `;
-    }).join("");
+            }).join("");
 
     return `
         <div class="admin-order-section">
@@ -410,13 +422,13 @@ async function createApiError(response, fallbackMessage) {
 function handleAuthorizationError(error) {
     if (error.status === 401) {
         alert("Din session er udløbet. Log ind igen.");
-        window.location.replace("/login.html");
+        window.location.replace("/log-ind");
         return true;
     }
 
     if (error.status === 403) {
         alert("Du har ikke administratoradgang til denne handling.");
-        window.location.replace("/forside.html");
+        window.location.replace("/");
         return true;
     }
 

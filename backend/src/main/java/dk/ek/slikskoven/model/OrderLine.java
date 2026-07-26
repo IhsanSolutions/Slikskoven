@@ -1,5 +1,6 @@
 package dk.ek.slikskoven.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -26,8 +27,20 @@ public class OrderLine {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Min(value = 1, message = "Mængde i gram skal være mindst 1")
-    private Integer quantityGrams;
+    /*
+     * BLAND_SELV:
+     * quantity betyder antal gram.
+     *
+     * Andre kategorier:
+     * quantity betyder antal styk.
+     *
+     * Databasens gamle kolonnenavn beholdes,
+     * så der ikke kræves en migration.
+     */
+    @JsonAlias("quantityGrams")
+    @Column(name = "quantity_grams")
+    @Min(value = 1, message = "Mængden skal være mindst 1")
+    private Integer quantity;
 
     private Double linePrice;
 }
