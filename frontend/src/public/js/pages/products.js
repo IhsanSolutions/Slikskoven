@@ -146,7 +146,7 @@ function showProducts(products) {
             <p>${escapeHtml(product.description || "")}</p>
 
             <div class="product-price">
-                ${formatPrice(product.price)} kr. / 100g
+                ${formatProductPrice(product)}
             </div>
 
             ${gelatineTag}
